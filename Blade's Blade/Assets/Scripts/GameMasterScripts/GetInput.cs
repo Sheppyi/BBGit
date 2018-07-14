@@ -36,7 +36,7 @@ public class GetInput : MonoBehaviour {
     public static bool axis_left_right_pressed;
     public static bool axis_left_left_pressed;
     public static bool axis_left_up_pressed;
-    public static bool axis_left_down_pressed;
+    public static bool axis_left_down_pressed;  
 
     public static bool axis_left_right_released;
     public static bool axis_left_left_released;
@@ -350,7 +350,7 @@ public class GetInput : MonoBehaviour {
         //███████████████████████████████████████████████████████████████████████████████████████████████
         //DEBUG
 
-        /*
+        
 
         //main buttons
         if (button_A_pressed == true) {
@@ -488,7 +488,7 @@ public class GetInput : MonoBehaviour {
         }
 
 
-        */
+        
         
 
     }
