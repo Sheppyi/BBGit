@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MovementController))]
+[RequireComponent(typeof(AnimationController))]
 
 public class Player : MonoBehaviour {
     float jumpVelocity;
     float gravity;
     Vector3 velocity;
     MovementController controller;
+    AnimationController animationController;
 
     bool movementEnabled = true;
     bool gravityEnabled = true;
     bool jumpEnabled = true;
     bool dashEnabled = true;
     bool allowGravityReduction = true;
+    
         float dashDoubleClickSpeedTR = 0;
         float dashDoubleClickSpeedTL = 0;
         float dashDoubleClickSpeedTU = 0;
@@ -46,6 +49,7 @@ public class Player : MonoBehaviour {
 
     private void Start() {
         controller = GetComponent<MovementController>();
+        animationController = GetComponent<AnimationController>();
         CalculatePhysics(jumpHeight, timeToJumpApex);
     }
 
@@ -109,6 +113,10 @@ public class Player : MonoBehaviour {
         		CheckDash();
         }
         //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        if (velocity.x == 0 && velocity.y == 0) {
+            animationController.PlayAnimation("BladeIdle", this.gameObject);
+        }
 
         //gravity
         if (gravityEnabled) {

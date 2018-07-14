@@ -341,24 +341,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!95 &219468729
-Animator:
-  serializedVersion: 3
+--- !u!114 &219468729
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 219468723}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f3256b7dc0562eb47b09f032a3c69f01, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdca268d68004b4fb41980cd5cafebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BladeIdle:
+  - {fileID: 21300000, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
+  - {fileID: 21300002, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
+  - {fileID: 21300004, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
+  - {fileID: 21300006, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
+  - {fileID: 21300008, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
+  - {fileID: 21300010, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
 --- !u!1 &247311280
 GameObject:
   m_ObjectHideFlags: 0
