@@ -350,7 +350,7 @@ public class GetInput : MonoBehaviour {
         //███████████████████████████████████████████████████████████████████████████████████████████████
         //DEBUG
 
-        
+        /*
 
         //main buttons
         if (button_A_pressed == true) {
@@ -489,7 +489,7 @@ public class GetInput : MonoBehaviour {
 
 
         
-        
+        */
 
     }
 }

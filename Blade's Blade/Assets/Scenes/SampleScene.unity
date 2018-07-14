@@ -359,6 +359,20 @@ MonoBehaviour:
   - {fileID: 21300006, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
   - {fileID: 21300008, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
   - {fileID: 21300010, guid: 9207dfdee9da6c54e97b745423ae1954, type: 3}
+  BladeDashLeft:
+  - {fileID: 21300000, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
+  - {fileID: 21300002, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
+  - {fileID: 21300004, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
+  - {fileID: 21300006, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
+  - {fileID: 21300008, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
+  - {fileID: 21300010, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
+  BladeDashRight:
+  - {fileID: 21300000, guid: fbeadda426479654d9957da1c65737c2, type: 3}
+  - {fileID: 21300002, guid: fbeadda426479654d9957da1c65737c2, type: 3}
+  - {fileID: 21300004, guid: fbeadda426479654d9957da1c65737c2, type: 3}
+  - {fileID: 21300006, guid: fbeadda426479654d9957da1c65737c2, type: 3}
+  - {fileID: 21300008, guid: fbeadda426479654d9957da1c65737c2, type: 3}
+  - {fileID: 21300010, guid: fbeadda426479654d9957da1c65737c2, type: 3}
 --- !u!1 &247311280
 GameObject:
   m_ObjectHideFlags: 0

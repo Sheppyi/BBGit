@@ -27,7 +27,7 @@ public class Player : MonoBehaviour {
         int AirDashesT = 0;
     float dashActivationDelayT = 0;
     int directionX = 1;
-    bool airborne;
+    bool airborne = true;
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement props
     float jumpHeight = 4;
@@ -113,10 +113,6 @@ public class Player : MonoBehaviour {
         		CheckDash();
         }
         //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
-        if (velocity.x == 0 && velocity.y == 0) {
-            animationController.PlayAnimation("BladeIdle", this.gameObject);
-        }
 
         //gravity
         if (gravityEnabled) {
@@ -207,6 +203,10 @@ public class Player : MonoBehaviour {
                 if (velocity.x < 0) {
                     velocity.x = 0;
                 }
+            }
+            //animation
+            if (velocity.x == 0 && velocity.y == 0 && !inDash) {
+                animationController.PlayAnimation("BladeIdle", this.gameObject, false);
             }
         }
         else {
@@ -317,6 +317,9 @@ public class Player : MonoBehaviour {
             velocity = direction * dashSpeed;
             dashLengthT = 0;
             AirDashesT++;
+            //animation
+            if(direction == Vector2.left) { animationController.PlayAnimation("BladeDashLeft", this.gameObject, true); }
+            else if (direction == Vector2.right) { animationController.PlayAnimation("BladeDashRight", this.gameObject, true); }
         }
         else {
         	controller.Move(new Vector2(0, -0.01f));	//to recheck collision
