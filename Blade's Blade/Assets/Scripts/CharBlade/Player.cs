@@ -25,7 +25,7 @@ public class Player : MonoBehaviour {
     float dashActivationDelayT = 0;
     int directionX = 1;
     bool airborne;
-    //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement props
     float jumpHeight = 4;
     float timeToJumpApex = 0.35f;
@@ -34,7 +34,7 @@ public class Player : MonoBehaviour {
     float airborneModifier = 0.5f;
     float gravityReductionAmount = 0.6f;        //reduction when holding space  (1 is 1:1 (lower is more))
     //dash
-    Vector2 dashSpeed = new Vector2(25,25); 	//horizontal and vertical speed
+    Vector2 dashSpeed = new Vector2(25,25); //horizontal and vertical speed
     float dashDoubleClickSpeed = 0.13f;
     float dashLength = 0.1f;
     Vector2 dashExitSpeed = new Vector2(0,0);
@@ -106,7 +106,63 @@ public class Player : MonoBehaviour {
         }
         //dash
         if (dashEnabled && AirDashesT < AirDashes) {
-        		CheckDash();
+            if (GetInput.dpad_right_released) {
+                dashDoubleClickSpeedTR = 0;
+            }
+            if (!GetInput.dpad_right) {
+                if(dashDoubleClickSpeedTR < dashDoubleClickSpeed + 0.1f) {
+                    dashDoubleClickSpeedTR += Time.deltaTime;
+                }
+            }
+            if (GetInput.dpad_right_pressed) {
+                if (dashDoubleClickSpeedTR < dashDoubleClickSpeed) {
+                    dashDoubleClickSpeedTR = dashDoubleClickSpeed + 0.1f;
+                    MovDash(Vector2.right , true);
+                }
+            }
+            if (GetInput.dpad_left_released) {
+                dashDoubleClickSpeedTL = 0;
+            }
+            if (!GetInput.dpad_left) {
+                if (dashDoubleClickSpeedTL < dashDoubleClickSpeed + 0.1f) {
+                    dashDoubleClickSpeedTL += Time.deltaTime;
+                }
+            }
+            if (GetInput.dpad_left_pressed) {
+                if (dashDoubleClickSpeedTL < dashDoubleClickSpeed) {
+                    dashDoubleClickSpeedTL = dashDoubleClickSpeed + 0.1f;
+                    MovDash(Vector2.left, true);
+                }
+            }
+
+            if (GetInput.dpad_up_released) {
+                dashDoubleClickSpeedTU = 0;
+            }
+            if (!GetInput.dpad_up) {
+                if (dashDoubleClickSpeedTU < dashDoubleClickSpeed + 0.1f) {
+                    dashDoubleClickSpeedTU += Time.deltaTime;
+                }
+            }
+            if (GetInput.dpad_up_pressed) {
+                if (dashDoubleClickSpeedTU < dashDoubleClickSpeed) {
+                    dashDoubleClickSpeedTU = dashDoubleClickSpeed + 0.1f;
+                    MovDash(Vector2.up, true);
+                }
+            }
+            if (GetInput.dpad_down_released) {
+                dashDoubleClickSpeedTD = 0;
+            }
+            if (!GetInput.dpad_down) {
+                if (dashDoubleClickSpeedTD < dashDoubleClickSpeed + 0.1f) {
+                    dashDoubleClickSpeedTD += Time.deltaTime;
+                }
+            }
+            if (GetInput.dpad_down_pressed) {
+                if (dashDoubleClickSpeedTD < dashDoubleClickSpeed) {
+                    dashDoubleClickSpeedTD = dashDoubleClickSpeed + 0.1f;
+                    MovDash(Vector2.down, true);
+                }
+            }
         }
         //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
@@ -134,8 +190,9 @@ public class Player : MonoBehaviour {
 
 
 
-    //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
     //movement functions
+
     void MovMoveRight() {
         if (!airborne) {
             if (directionX == -1) {
@@ -225,80 +282,6 @@ public class Player : MonoBehaviour {
         airborne = true;
     }
 
-    void CheckDash(){
-		//analog activation
-		if(GetInput.axis_left_right_pressed){
-			MovDash(Vector2.right, true);
-		}
-		if(GetInput.axis_left_left_pressed){
-			MovDash(Vector2.left, true);
-		}
-		if(GetInput.axis_left_up_pressed){
-			MovDash(Vector2.up, true);
-		}
-		if(GetInput.axis_left_down_pressed){
-			MovDash(Vector2.down, true);
-		}
-    	//dpad double click
-        if (GetInput.dpad_right_released) {
-            dashDoubleClickSpeedTR = 0;
-        }
-        if (!GetInput.dpad_right) {
-            if(dashDoubleClickSpeedTR < dashDoubleClickSpeed + 0.1f) {
-                dashDoubleClickSpeedTR += Time.deltaTime;
-            }
-        }
-        if (GetInput.dpad_right_pressed) {
-            if (dashDoubleClickSpeedTR < dashDoubleClickSpeed) {
-                dashDoubleClickSpeedTR = dashDoubleClickSpeed + 0.1f;
-                MovDash(Vector2.right , true);
-            }
-        }
-        if (GetInput.dpad_left_released) {
-            dashDoubleClickSpeedTL = 0;
-        }
-        if (!GetInput.dpad_left) {
-            if (dashDoubleClickSpeedTL < dashDoubleClickSpeed + 0.1f) {
-                dashDoubleClickSpeedTL += Time.deltaTime;
-            }
-        }
-        if (GetInput.dpad_left_pressed) {
-            if (dashDoubleClickSpeedTL < dashDoubleClickSpeed) {
-                dashDoubleClickSpeedTL = dashDoubleClickSpeed + 0.1f;
-                MovDash(Vector2.left, true);
-            }
-        }
-
-        if (GetInput.dpad_up_released) {
-            dashDoubleClickSpeedTU = 0;
-        }
-        if (!GetInput.dpad_up) {
-            if (dashDoubleClickSpeedTU < dashDoubleClickSpeed + 0.1f) {
-                dashDoubleClickSpeedTU += Time.deltaTime;
-            }
-        }
-        if (GetInput.dpad_up_pressed) {
-            if (dashDoubleClickSpeedTU < dashDoubleClickSpeed) {
-                dashDoubleClickSpeedTU = dashDoubleClickSpeed + 0.1f;
-                MovDash(Vector2.up, true);
-            }
-        }
-        if (GetInput.dpad_down_released) {
-            dashDoubleClickSpeedTD = 0;
-        }
-        if (!GetInput.dpad_down) {
-            if (dashDoubleClickSpeedTD < dashDoubleClickSpeed + 0.1f) {
-                dashDoubleClickSpeedTD += Time.deltaTime;
-            }
-        }
-        if (GetInput.dpad_down_pressed) {
-            if (dashDoubleClickSpeedTD < dashDoubleClickSpeed) {
-                dashDoubleClickSpeedTD = dashDoubleClickSpeed + 0.1f;
-                MovDash(Vector2.down, true);
-            }
-        }
-    }
-
     void MovDash(Vector2 direction, bool activate) {
         if (activate) {
             gravityEnabled = false;
@@ -312,8 +295,7 @@ public class Player : MonoBehaviour {
             AirDashesT++;
         }
         else {
-        	controller.Move(new Vector2(0, -0.01f));	//to recheck collision
-            if (!controller.collisions.below) { airborne = true; } else {airborne = false;}
+            if (!controller.collisions.below) { airborne = true; }
             if (!airborne) {
                 movementEnabled = true;
                 gravityEnabled = true;
@@ -329,6 +311,16 @@ public class Player : MonoBehaviour {
             
         }
     }
+
+
+
+
+
+
+
+
+
+
 }
 
     
