@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
     bool jumpEnabled = true;
     bool dashEnabled = true;
     bool allowGravityReduction = true;
+    bool lockDirection = false;
     
         float dashDoubleClickSpeedTR = 0;
         float dashDoubleClickSpeedTL = 0;
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour {
     float maxHorizontalMovementSpeed = 12;
     float airborneModifier = 0.5f;
     float gravityReductionAmount = 0.6f;        //reduction when holding space  (1 is 1:1 (lower is more))
+    float airbornRotationDeadZone = 3f;
     //dash
     Vector2 dashSpeed = new Vector2(25,25); 	//horizontal and vertical speed
     float dashDoubleClickSpeed = 0.13f;
@@ -55,18 +57,28 @@ public class Player : MonoBehaviour {
 
     private void Update() {
         //initilization
-        if (controller.collisions.above || controller.collisions.below) {
+        if (controller.collisions.above || controller.collisions.below) {           //velocity reset vertical collision
             velocity.y = 0;
             AirDashesT = 0;
             airborne = false;
         }
-        if (controller.collisions.right || controller.collisions.left) {
+        if (controller.collisions.right || controller.collisions.left) {            //velocity reset horizontal collision
             velocity.x = 0;
         }
-        if (velocity.x != 0) {   //set the direction the character is looking at
-            directionX = (velocity.x > 0) ? 1 : -1;
+        if (velocity.x != 0 && !lockDirection) {                                    //direction
+            if (airborne) {
+                if (velocity.x > airbornRotationDeadZone) {
+                    directionX = 1;
+                }
+                else if (velocity.x < -airbornRotationDeadZone){
+                    directionX = -1;
+                }
+            }
+            else {
+                directionX = (velocity.x > 0) ? 1 : -1;
+            }
         }
-        if (velocity.y != 0) { airborne = true; }
+        if (velocity.y != 0) { airborne = true; }                                   //airborn
 
         //timing
         if (dashLengthT < dashLength + 0.1f) {
@@ -206,7 +218,11 @@ public class Player : MonoBehaviour {
             }
             //animation
             if (velocity.x == 0 && velocity.y == 0 && !inDash) {
-                animationController.PlayAnimation("BladeIdle", this.gameObject, false);
+                if (directionX == 1) {
+                    animationController.PlayAnimation("BladeIdleRight", this.gameObject, false);
+                } else if (directionX == -1) {
+                    animationController.PlayAnimation("BladeIdleLeft", this.gameObject, false);
+                }
             }
         }
         else {
@@ -314,12 +330,13 @@ public class Player : MonoBehaviour {
             jumpEnabled = false;
             dashEnabled = false;
             inDash = true;
+            lockDirection = true;
             velocity = direction * dashSpeed;
             dashLengthT = 0;
             AirDashesT++;
             //animation
-            if(direction == Vector2.left) { animationController.PlayAnimation("BladeDashLeft", this.gameObject, true); }
-            else if (direction == Vector2.right) { animationController.PlayAnimation("BladeDashRight", this.gameObject, true); }
+            if(direction == Vector2.left && directionX == 1) { animationController.PlayAnimation("BladeDashLeftBackWards", this.gameObject, true); }
+            else if (direction == Vector2.right && directionX == -1) { animationController.PlayAnimation("BladeDashRightBackWards", this.gameObject, true); }
         }
         else {
         	controller.Move(new Vector2(0, -0.01f));	//to recheck collision
@@ -334,6 +351,7 @@ public class Player : MonoBehaviour {
             jumpEnabled = true;
             dashEnabled = true;
             inDash = false;
+            lockDirection = false;
             dashLengthT = dashLength + 0.1f;
             velocity = dashExitSpeed;
             
