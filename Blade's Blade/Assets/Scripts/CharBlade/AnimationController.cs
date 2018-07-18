@@ -12,22 +12,19 @@ public class AnimationController : MonoBehaviour {
     float currentFrameLength;
     float currentFrameLengthT;
     string currentAnimation = "null";
+    bool flipX = false;
 
-    public Sprite[] BladeIdleRight = new Sprite[11];
-    int BladeIdleRightFrameRate =10;
-    bool BladeIdleRightLoop = true;
+    public Sprite[] BladeIdle = new Sprite[11];
+    int BladeIdleFrameRate =10;
+    bool BladeIdleLoop = true;
 
     public Sprite[] BladeIdleLeft = new Sprite[11];
     int BladeIdleLeftFrameRate = 10;
     bool BladeIdleLeftLoop = true;
 
-    public Sprite[] BladeDashLeftBackWards = new Sprite[5];
-    int BladeDashLeftBackWardsFrameRate = 14;
-    bool BladeDashLeftBackWardsLoop = false;
-
-    public Sprite[] BladeDashRightBackWards = new Sprite[5];
-    int BladeDashRightBackWardsFrameRate = 14;
-    bool BladeDashRightBackWardsLoop = false;
+    public Sprite[] BladeDashHorizontalBackwards = new Sprite[5];
+    int BladeDashHorizontalBackwardsFrameRate = 14;
+    bool BladeDashHorizontalBackwardsLoop = false;
 
     public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation) {
         if (animation == currentAnimation && !overrideAnimation) {
@@ -37,57 +34,32 @@ public class AnimationController : MonoBehaviour {
         currentSpriteFrame = 0;
         currentAnimationLength = 0;
         currentFrameLength = 0;
-        bool Error = true;
         switch (animation) { 
-            case "BladeIdleRight":
+            case "BladeIdle":
                 currentAnimation = animation;
-                currentFrameLength = 1f / BladeIdleRightFrameRate;  //f is important for floatpoint division
+                currentFrameLength = 1f / BladeIdleFrameRate;  //f is important for floatpoint division
                 currentFrameLengthT = 0;
-                doesLoop = BladeIdleRightLoop;
-                Error = false;
-                for (int i = 0; i < BladeIdleRight.Length; i++) {
-                    currentSprite[i] = BladeIdleRight[i];
+                doesLoop = BladeIdleLoop;
+                for (int i = 0; i < BladeIdle.Length; i++) {
+                    currentSprite[i] = BladeIdle[i];
                     currentAnimationLength++;
                 }
                 break;
-            case "BladeIdleLeft":
+            case "BladeDashHorizontalBackwards":
                 currentAnimation = animation;
-                currentFrameLength = 1f / BladeIdleLeftFrameRate;  //f is important for floatpoint division
+                currentFrameLength = 1f / BladeDashHorizontalBackwardsFrameRate;
                 currentFrameLengthT = 0;
-                doesLoop = BladeIdleLeftLoop;
-                Error = false;
-                for (int i = 0; i < BladeIdleLeft.Length; i++) {
-                    currentSprite[i] = BladeIdleLeft[i];
+                doesLoop = BladeDashHorizontalBackwardsLoop;
+                for (int i = 0; i < BladeDashHorizontalBackwards.Length; i++) {
+                    currentSprite[i] = BladeDashHorizontalBackwards[i];
                     currentAnimationLength++;
                 }
                 break;
-            case "BladeDashLeftBackWards":
-                currentAnimation = animation;
-                currentFrameLength = 1f / BladeDashLeftBackWardsFrameRate;  
-                currentFrameLengthT = 0;
-                doesLoop = BladeDashLeftBackWardsLoop;
-                Error = false;
-                for (int i = 0; i < BladeDashLeftBackWards.Length; i++) {
-                    currentSprite[i] = BladeDashLeftBackWards[i];
-                    currentAnimationLength++;
-                }
-                break;
-            case "BladeDashRightBackWards":
-                currentAnimation = animation;
-                currentFrameLength = 1f / BladeDashRightBackWardsFrameRate;
-                currentFrameLengthT = 0;
-                doesLoop = BladeDashRightBackWardsLoop;
-                Error = false;
-                for (int i = 0; i < BladeDashRightBackWards.Length; i++) {
-                    currentSprite[i] = BladeDashRightBackWards[i];
-                    currentAnimationLength++;
-                }
+            default:
+                Debug.LogWarning("non.existent Animation String passed");
                 break;
         }
-        currentSpriteRenderer.sprite = currentSprite[currentSpriteFrame];
-        if (Error) {
-            Debug.LogWarning("non.existent Animation String passed");
-        }
+        applySprite(currentSprite[currentSpriteFrame]);
     }
 
 
@@ -103,10 +75,24 @@ public class AnimationController : MonoBehaviour {
                 if (currentSpriteFrame >= currentAnimationLength && !doesLoop) {
                     currentSpriteFrame = currentAnimationLength - 1;
                 }
-                currentSpriteRenderer.sprite = currentSprite[currentSpriteFrame];
+                //apply frame
+                applySprite(currentSprite[currentSpriteFrame]);
             }
         }
-
     }
+
+        public void applySprite(Sprite sprite){
+            currentSpriteRenderer.sprite = sprite;
+                if(this.GetComponent<Player>().facingDirection == 1){
+                    flipX = false;
+                    currentSpriteRenderer.flipX = false;
+                }
+                else{
+                    flipX = true;
+                    currentSpriteRenderer.flipX = true;
+                }
+        }
+
+
 
 }

@@ -316,6 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb35b2b7a6954b4f8d37b11237b075c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  facingDirection: 1
 --- !u!61 &219468728
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -352,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cdca268d68004b4fb41980cd5cafebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BladeIdleRight:
+  BladeIdle:
   - {fileID: 21300000, guid: 3d01dcdbf070cff4cb19ea19bdbd6dd7, type: 3}
   - {fileID: 21300002, guid: 3d01dcdbf070cff4cb19ea19bdbd6dd7, type: 3}
   - {fileID: 21300004, guid: 3d01dcdbf070cff4cb19ea19bdbd6dd7, type: 3}
@@ -376,13 +377,7 @@ MonoBehaviour:
   - {fileID: 21300016, guid: 1f354b711c120b74884807e39c7e62e6, type: 3}
   - {fileID: 21300018, guid: 1f354b711c120b74884807e39c7e62e6, type: 3}
   - {fileID: 21300020, guid: 1f354b711c120b74884807e39c7e62e6, type: 3}
-  BladeDashLeftBackWards:
-  - {fileID: 21300000, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
-  - {fileID: 21300002, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
-  - {fileID: 21300004, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
-  - {fileID: 21300006, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
-  - {fileID: 21300008, guid: fae2fd4769bb5234bb52978ad3fd21b5, type: 3}
-  BladeDashRightBackWards:
+  BladeDashHorizontalBackwards:
   - {fileID: 21300000, guid: fbeadda426479654d9957da1c65737c2, type: 3}
   - {fileID: 21300002, guid: fbeadda426479654d9957da1c65737c2, type: 3}
   - {fileID: 21300004, guid: fbeadda426479654d9957da1c65737c2, type: 3}

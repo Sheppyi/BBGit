@@ -27,7 +27,7 @@ public class Player : MonoBehaviour {
         bool inDash = false;
         int AirDashesT = 0;
     float dashActivationDelayT = 0;
-    int directionX = 1;
+    public int facingDirection = 1;
     bool airborne = true;
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement props
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
-        //initilization
+        //initialization
         if (controller.collisions.above || controller.collisions.below) {           //velocity reset vertical collision
             velocity.y = 0;
             AirDashesT = 0;
@@ -68,14 +68,14 @@ public class Player : MonoBehaviour {
         if (velocity.x != 0 && !lockDirection) {                                    //direction
             if (airborne) {
                 if (velocity.x > airbornRotationDeadZone) {
-                    directionX = 1;
+                    facingDirection = 1;
                 }
                 else if (velocity.x < -airbornRotationDeadZone){
-                    directionX = -1;
+                    facingDirection = -1;
                 }
             }
             else {
-                directionX = (velocity.x > 0) ? 1 : -1;
+                facingDirection = (velocity.x > 0) ? 1 : -1;
             }
         }
         if (velocity.y != 0) { airborne = true; }                                   //airborn
@@ -153,7 +153,7 @@ public class Player : MonoBehaviour {
     //movement functions
     void MovMoveRight() {
         if (!airborne) {
-            if (directionX == -1) {
+            if (facingDirection == -1) {
                 //play brake animation
             }
             else {
@@ -178,7 +178,7 @@ public class Player : MonoBehaviour {
 
     void MovMoveLeft() {
         if (!airborne) {
-            if (directionX == -1) {
+            if (facingDirection == -1) {
                 //play brake animation
             }
             else {
@@ -204,7 +204,7 @@ public class Player : MonoBehaviour {
 
     void MovMoveNone() {
         if (!airborne) {
-            if (directionX == -1) {
+            if (facingDirection == -1) {
                 velocity.x += accelerationAmount * Time.deltaTime;
                 if (velocity.x > 0) {
                     velocity.x = 0;
@@ -218,16 +218,12 @@ public class Player : MonoBehaviour {
             }
             //animation
             if (velocity.x == 0 && velocity.y == 0 && !inDash) {
-                if (directionX == 1) {
-                    animationController.PlayAnimation("BladeIdleRight", this.gameObject, false);
-                } else if (directionX == -1) {
-                    animationController.PlayAnimation("BladeIdleLeft", this.gameObject, false);
-                }
+                    animationController.PlayAnimation("BladeIdle", this.gameObject, false);
             }
         }
         else {
             //airborne
-            if (directionX == -1) {
+            if (facingDirection == -1) {
                 velocity.x += accelerationAmount * Time.deltaTime * airborneModifier;
                 if (velocity.x > 0) {
                     velocity.x = 0;
@@ -240,7 +236,7 @@ public class Player : MonoBehaviour {
                 }
             }
         }
-
+            
     }
 
     void MovJump() {
@@ -335,8 +331,9 @@ public class Player : MonoBehaviour {
             dashLengthT = 0;
             AirDashesT++;
             //animation
-            if(direction == Vector2.left && directionX == 1) { animationController.PlayAnimation("BladeDashLeftBackWards", this.gameObject, true); }
-            else if (direction == Vector2.right && directionX == -1) { animationController.PlayAnimation("BladeDashRightBackWards", this.gameObject, true); }
+            if(direction == Vector2.left || direction == Vector2.right) {
+                animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true); 
+                }
         }
         else {
         	controller.Move(new Vector2(0, -0.01f));	//to recheck collision
