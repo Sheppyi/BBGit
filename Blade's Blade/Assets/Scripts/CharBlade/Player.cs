@@ -331,7 +331,7 @@ public class Player : MonoBehaviour {
             dashLengthT = 0;
             AirDashesT++;
             //animation
-            if(direction == Vector2.left || direction == Vector2.right) {
+            if((direction == Vector2.left && facingDirection == 1)||(direction == Vector2.right && facingDirection == -1)) {
                 animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true); 
                 }
         }

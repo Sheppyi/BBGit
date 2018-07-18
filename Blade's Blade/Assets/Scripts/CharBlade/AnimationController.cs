@@ -18,10 +18,6 @@ public class AnimationController : MonoBehaviour {
     int BladeIdleFrameRate =10;
     bool BladeIdleLoop = true;
 
-    public Sprite[] BladeIdleLeft = new Sprite[11];
-    int BladeIdleLeftFrameRate = 10;
-    bool BladeIdleLeftLoop = true;
-
     public Sprite[] BladeDashHorizontalBackwards = new Sprite[5];
     int BladeDashHorizontalBackwardsFrameRate = 14;
     bool BladeDashHorizontalBackwardsLoop = false;
@@ -75,7 +71,6 @@ public class AnimationController : MonoBehaviour {
                 if (currentSpriteFrame >= currentAnimationLength && !doesLoop) {
                     currentSpriteFrame = currentAnimationLength - 1;
                 }
-                //apply frame
                 applySprite(currentSprite[currentSpriteFrame]);
             }
         }

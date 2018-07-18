@@ -1,13 +1,18 @@
 fileFormatVersion: 2
-guid: fae2fd4769bb5234bb52978ad3fd21b5
+guid: ccf45b85c361fca428cca0f51ef9d4cb
 TextureImporter:
   fileIDToRecycleName:
-    21300000: DashAnimationHorizontal_0
-    21300002: DashAnimationHorizontal_1
-    21300004: DashAnimationHorizontal_2
-    21300006: DashAnimationHorizontal_3
-    21300008: DashAnimationHorizontal_4
-    21300010: DashAnimationHorizontal_5
+    21300000: IdleAnimation_0
+    21300002: IdleAnimation_1
+    21300004: IdleAnimation_2
+    21300006: IdleAnimation_3
+    21300008: IdleAnimation_4
+    21300010: IdleAnimation_5
+    21300012: IdleAnimation_6
+    21300014: IdleAnimation_7
+    21300016: IdleAnimation_8
+    21300018: IdleAnimation_9
+    21300020: IdleAnimation_10
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -88,7 +93,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DashAnimationHorizontal_0
+      name: IdleAnimation_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 240
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6768fb356d14c24aa65128c0b11c38d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IdleAnimation_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 240
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62df02512617cd0498f3bf74c25daa52
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IdleAnimation_2
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 240
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 361b2984005a3f04a85aee0e1ab71bfa
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IdleAnimation_3
       rect:
         serializedVersion: 2
         x: 0
@@ -102,13 +167,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0cb08569b6c57be458a664fed1f18045
+      spriteID: 76e5e4f2602a9384697d2a0c205c862f
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DashAnimationHorizontal_1
+      name: IdleAnimation_4
       rect:
         serializedVersion: 2
         x: 80
@@ -122,13 +187,33 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b93c0e04b614b2a43a9547f7bb527187
+      spriteID: 2247fc87a7538344a94da89ac7b3fb32
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DashAnimationHorizontal_2
+      name: IdleAnimation_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 160
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f24e9cf18139fb244973934e968bf5db
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IdleAnimation_6
       rect:
         serializedVersion: 2
         x: 0
@@ -142,13 +227,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9424bc3235faae649b4594755293c0cd
+      spriteID: 4afc79fe2abdcb24a8e44f41634c1c6a
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DashAnimationHorizontal_3
+      name: IdleAnimation_7
       rect:
         serializedVersion: 2
         x: 80
@@ -162,13 +247,33 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4af1aa8d122be764a8b04a37d50819c8
+      spriteID: 466329ce1dd059b4b92f8d0235e4f38e
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DashAnimationHorizontal_4
+      name: IdleAnimation_8
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 80
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdbfdf96bd7ab4041b3ba270348690a0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IdleAnimation_9
       rect:
         serializedVersion: 2
         x: 0
@@ -182,13 +287,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 462f49b9b52302c4b98d8cb489518809
+      spriteID: ff5e118d0ae33314abadaa39756d5da3
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DashAnimationHorizontal_5
+      name: IdleAnimation_10
       rect:
         serializedVersion: 2
         x: 80
@@ -202,7 +307,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed1c44212030d8a4bb7956d9e94c09d5
+      spriteID: e1cd81e789698014095acbdbca618da8
       vertices: []
       indices: 
       edges: []
@@ -210,7 +315,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 8a209de36ce01d64f9162850ad523dca
+    spriteID: bc2d819cd0b276546bb33c87b4200ec2
     vertices: []
     indices: 
     edges: []
