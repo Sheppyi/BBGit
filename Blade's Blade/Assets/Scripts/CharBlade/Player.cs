@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
     float jumpHeight = 4;
     float timeToJumpApex = 0.35f;
     float accelerationAmount = 50;
-    float maxHorizontalMovementSpeed = 9;
+    float maxHorizontalMovementSpeed = 14;
     float maxVerticalMovementSpeed = 20;
     float airborneModifier = 0.5f;
     float gravityReductionAmount = 0.6f;        //reduction when holding space  (1 is 1:1 (lower is more))
@@ -183,10 +183,15 @@ public class Player : MonoBehaviour {
         inlandingAnimation = false;
         if (!airborne) {
             if (facingDirection == -1) {
-                //play brake animation
+               //brake animation
             }
             else {
-                //play accel animation
+                if (velocity.x >= maxHorizontalMovementSpeed) {
+                    animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0);
+                }
+                else {
+                    //accel animation
+                }
             }
             if (velocity.x + accelerationAmount * Time.deltaTime < maxHorizontalMovementSpeed) {
                 velocity.x += accelerationAmount * Time.deltaTime;
@@ -209,10 +214,15 @@ public class Player : MonoBehaviour {
         inlandingAnimation = false;
         if (!airborne) {
             if (facingDirection == -1) {
-                //play brake animation
+                if (velocity.x <= -maxHorizontalMovementSpeed) {
+                    animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0);
+                }
+                else {
+                    //accel animation
+                }
             }
             else {
-                //play accel animation
+                //brake animatino
             }
             if (velocity.x - accelerationAmount * Time.deltaTime > -maxHorizontalMovementSpeed) {
                 velocity.x -= accelerationAmount * Time.deltaTime;
@@ -249,6 +259,7 @@ public class Player : MonoBehaviour {
             //animation
             if (velocity.x == 0 && velocity.y == 0 && !inDash && !inlandingAnimation) {
                     animationController.PlayAnimation("BladeIdle", this.gameObject, false, 0);
+
             }
         }
         else {

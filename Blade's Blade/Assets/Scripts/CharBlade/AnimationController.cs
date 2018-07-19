@@ -38,8 +38,13 @@ public class AnimationController : MonoBehaviour {
 
     public Sprite[] bladeLanding = new Sprite[9];
     int bladeLandingFrameRate = 20;
-    bool bladeLandingLoop = false;
+    bool bladeLandingLoop = true;
     int bladeLandingLoopFrame = 1;
+
+    public Sprite[] bladeRunning = new Sprite[6];
+    int bladeRunningFrameRate = 14;
+    bool bladeRunningLoop = true;
+    int bladeRunningLoopFrame = 1;
 
     public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame) {
         if (animation == currentAnimation && !overrideAnimation) {
@@ -52,6 +57,7 @@ public class AnimationController : MonoBehaviour {
         currentSpriteFrame = startAtFrame;
         currentAnimationLength = 0;
         currentFrameLength = 0;
+        playAnimationAfterLastFrame = false;
         switch (animation) {
             case "BladeIdle":
                 currentFrameLength = 1f / BladeIdleFrameRate;  //f is important for floatpoint division
@@ -105,6 +111,17 @@ public class AnimationController : MonoBehaviour {
                 playAnimationAfterLastFrame = true;
                 for (int i = 0; i < bladeLanding.Length; i++) {
                     currentSprite[i] = bladeLanding[i];
+                    currentAnimationLength++;
+                }
+                break;
+            case "BladeRunning":
+                currentFrameLength = 1f / bladeRunningFrameRate;
+                currentFrameLengthT = 0;
+                doesLoop = bladeRunningLoop;
+                currentLoopFrame = bladeRunningLoopFrame;
+                playAnimationAfterLastFrame = false;
+                for (int i = 0; i < bladeRunning.Length; i++) {
+                    currentSprite[i] = bladeRunning[i];
                     currentAnimationLength++;
                 }
                 break;
