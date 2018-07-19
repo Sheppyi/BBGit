@@ -6,58 +6,58 @@ using UnityEngine;
 [RequireComponent(typeof(AnimationController))]
 
 public class Player : MonoBehaviour {
-    float jumpVelocity;
-    float gravity;
-    public Vector3 velocity;
-    public Vector3 oldVelocity;
-    MovementController controller;
-    AnimationController animationController;
+    float jumpVelocity;                         //the velocity that the player Jumps with. Gets calculated in CalculatePhysics() !CAN BE OVERWRITTEN. IF YOU WANT TO CHANGE BACK TO DEFAULT CALL CALCULATE PHYSICS AGAIN!
+    float gravity;                              //the gravity that is applied to velocity.y each second. Gets calculated in CalculatePhysics() !CAN BE OVERWRITTEN. IF YOU WANT TO CHANGE BACK TO DEFAULT CALL CALCULATE PHYSICS AGAIN!
+    public Vector3 velocity;                    //the velocity value. all movements are stored in here and are sent over to the movement movementController for collision checking
+    public Vector3 oldVelocity;                 //the velocity of the previous frame
+    MovementController movementController;              //The movementcontroller script component
+    AnimationController animationController;    //The animationController script component.
 
-    bool movementEnabled = true;
-    bool gravityEnabled = true;
-    bool jumpEnabled = true;
-    bool dashEnabled = true;
-    bool allowGravityReduction = true;
-    bool lockDirection = false;
-    
-        float dashDoubleClickSpeedTR = 0;
-        float dashDoubleClickSpeedTL = 0;
-        float dashDoubleClickSpeedTU = 0;
-        float dashDoubleClickSpeedTD = 0;
-        float dashLengthT = 0;
-        bool inDash = false;
-        int AirDashesT = 0;
-    float dashActivationDelayT = 0;
-    public int facingDirection = 1;
-    bool airborne = true;
+    bool movementEnabled = true;                //Is movement enabled or not?
+    bool gravityEnabled = true;                 //Is gravity enabled or not?
+    bool jumpEnabled = true;                    //is Jumping enabled or not?
+    bool dashEnabled = true;                    //is Dash enabled or not?
+    bool allowGravityReduction = true;          //is the Gravity reduction when pressing A enabled or not?
+    bool lockDirection = false;                 //is the horizontal velocity not allowed to change the direction the player is facing?
+
+    float dashDoubleClickSpeedTR = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
+    float dashDoubleClickSpeedTL = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
+    float dashDoubleClickSpeedTU = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
+    float dashDoubleClickSpeedTD = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
+    float dashLengthT = 0;                  //is used internally to measure and time the lenght of the dash
+    bool inDash = false;                    //is the player in Dash or not
+    int AirDashesT = 0;                     //the number of airdashes that are left 
+    float dashActivationDelayT = 0;         //is used internally to measure and time the activation Delay for the dash
+    public int facingDirection = 1;         //This is the direction the player is facing in  LEAVE PUBLIC PLS K THX
+    bool airborne = true;                   //Is the player in the Air or not?
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement props
-    float jumpHeight = 4;
-    float timeToJumpApex = 0.35f;
-    float accelerationAmount = 50;
-    float maxHorizontalMovementSpeed = 14;
-    float maxVerticalMovementSpeed = 20;
-    float airborneModifier = 0.5f;
+    float jumpHeight = 4;                       //the Height that the player jumps
+    float timeToJumpApex = 0.35f;               //Time to reach the highest point of the jump
+    float accelerationAmount = 40;              //the speed that is added each second.
+    float maxHorizontalMovementSpeed = 14;      //the maximum horizontal speed. THIS ISNT GLOBAL AND NEEDS TO BE CODED INTO A FUNCTION IF YOU WANT TO USE IT  
+    float maxVerticalMovementSpeed = 20;        //the maximum vertical speed. THIS ISNT GLOBAL AND NEEDS TO BE CODED INTO A FUNCTION IF YOU WANT TO USE IT
+    float airborneModifier = 0.5f;              //when holding a how much is the gravity reduced?
     float gravityReductionAmount = 0.6f;        //reduction when holding space  (1 is 1:1 (lower is more))
     float airbornRotationDeadZone = 3f;
     //animation
-    float fallingAnimationThreshold = -3;
+    float fallingAnimationThreshold = -3;       //speed needed for falling animation to play
     public bool inlandingAnimation = false;     //needs to be public for animator
-    bool landingEnabled = false;
-    float velocityNeededForLanding =  -20;
+    bool landingEnabled = false;                //is landing animation enabled  (ensures it doesnt play the entire time)
+    float velocityNeededForLanding =  -20;      //velocity thats needed for the landing animation to play
     //dash
     Vector2 dashSpeed = new Vector2(25,25); 	//horizontal and vertical speed
-    float dashDoubleClickSpeed = 0.13f;
-    float dashLength = 0.1f;
-    Vector2 dashExitSpeed = new Vector2(0,0);
-    static int AirDashes = 2;
-    float dashActivationDelay = 0.3f;
+    float dashDoubleClickSpeed = 0.13f;         //how fast do you have to double click in order to activate the dash
+    float dashLength = 0.1f;                    //the length of the dash in seconds
+    Vector2 dashExitSpeed = new Vector2(0,0);   //the speed the dash exits with
+    static int AirDashes = 2;                   //the number of airdashes available to the player (maybe add upgrades in the future)
+    float dashActivationDelay = 0.3f;           //the for the gravity to reactivate. A second dash can be cast after the dashLength;  !This is skipped if the player touches the ground OR the ceiling  OR the player moves in the air!
 
 
 
 
     private void Start() {
-        controller = GetComponent<MovementController>();
+        movementController = GetComponent<MovementController>();
         animationController = GetComponent<AnimationController>();
         CalculatePhysics(jumpHeight, timeToJumpApex);
     }
@@ -71,12 +71,12 @@ public class Player : MonoBehaviour {
     private void Update() {
         //initialization
         oldVelocity = velocity;
-        if (controller.collisions.above || controller.collisions.below) {           //velocity reset vertical collision
+        if (movementController.collisions.above || movementController.collisions.below) {           //velocity reset vertical collision
             velocity.y = 0;
             AirDashesT = 0;
             airborne = false;
         }
-        if (controller.collisions.right || controller.collisions.left) {            //velocity reset horizontal collision
+        if (movementController.collisions.right || movementController.collisions.left) {            //velocity reset horizontal collision
             velocity.x = 0;
         }
         if (velocity.x != 0 && !lockDirection) {                                    //direction
@@ -152,8 +152,6 @@ public class Player : MonoBehaviour {
                 velocity.y = -maxVerticalMovementSpeed;
             }
         }
-        //finish
-        controller.Move(velocity * Time.deltaTime);
 
         //landing animation
         if (airborne) {
@@ -175,6 +173,10 @@ public class Player : MonoBehaviour {
         if (velocity.y <= fallingAnimationThreshold) {          //falling
             animationController.PlayAnimation("BladeFalling", this.gameObject, false, 0);
         }
+
+        //finish
+        movementController.Move(velocity * Time.deltaTime);
+        Physics2D.SyncTransforms(); //sync hitbox after transform
     }
 
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -380,8 +382,8 @@ public class Player : MonoBehaviour {
                 }
         }
         else {
-        	controller.Move(new Vector2(0, -0.01f));	//to recheck collision
-            if (!controller.collisions.below) { airborne = true; } else {airborne = false;}
+        	movementController.Move(new Vector2(0, -0.01f));	//to recheck collision
+            if (!movementController.collisions.below) { airborne = true; } else {airborne = false;}
             if (!airborne) {
                 movementEnabled = true;
                 gravityEnabled = true;

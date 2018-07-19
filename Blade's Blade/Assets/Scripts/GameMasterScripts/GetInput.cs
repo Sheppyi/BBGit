@@ -67,10 +67,12 @@ public class GetInput : MonoBehaviour {
     public static bool dpad_left;
     public static bool dpad_up;
     public static bool dpad_down;
+
     public static bool dpad_right_pressed;
     public static bool dpad_left_pressed;
     public static bool dpad_up_pressed;
     public static bool dpad_down_pressed;
+
     public static bool dpad_right_released;
     public static bool dpad_left_released;
     public static bool dpad_up_released;

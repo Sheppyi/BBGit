@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
+
+    //I copied that shit from a tutorial on YT :)
+    //uses raycast in order to check for collision
+    //assign new objects to collide with in inspector
     public LayerMask collisionMask;
 
     const float skinWidth = .015f;
