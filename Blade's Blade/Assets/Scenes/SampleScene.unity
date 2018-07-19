@@ -220,10 +220,10 @@ GameObject:
   m_Component:
   - component: {fileID: 219468724}
   - component: {fileID: 219468725}
-  - component: {fileID: 219468728}
   - component: {fileID: 219468727}
   - component: {fileID: 219468726}
   - component: {fileID: 219468729}
+  - component: {fileID: 219468728}
   m_Layer: 15
   m_Name: BladeDefMode
   m_TagString: Player
@@ -316,7 +316,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb35b2b7a6954b4f8d37b11237b075c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  velocity: {x: 0, y: 0, z: 0}
+  oldVelocity: {x: 0, y: 0, z: 0}
   facingDirection: 1
+  inlandingAnimation: 0
 --- !u!61 &219468728
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -365,12 +368,35 @@ MonoBehaviour:
   - {fileID: 21300016, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
   - {fileID: 21300018, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
   - {fileID: 21300020, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
+  - {fileID: 21300022, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
   BladeDashHorizontalBackwards:
   - {fileID: 21300000, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
   - {fileID: 21300002, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
   - {fileID: 21300004, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
   - {fileID: 21300006, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
   - {fileID: 21300008, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
+  bladeFalling:
+  - {fileID: 21300000, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  - {fileID: 21300002, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  - {fileID: 21300004, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  - {fileID: 21300006, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  - {fileID: 21300008, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  - {fileID: 21300010, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  - {fileID: 21300012, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  - {fileID: 21300014, guid: c847956741f28f240bba3e273121d9d1, type: 3}
+  bladeJumping:
+  - {fileID: 21300000, guid: 42d0dc54c0d664742a3089b56ca6ade5, type: 3}
+  - {fileID: 21300002, guid: 42d0dc54c0d664742a3089b56ca6ade5, type: 3}
+  bladeLanding:
+  - {fileID: 21300000, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300002, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300004, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300006, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300008, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300010, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300012, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300014, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
+  - {fileID: 21300016, guid: c3aec1de77ffaea43a36452e1bb7870e, type: 3}
 --- !u!1 &247311280
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
+  - component: {fileID: 519420030}
   - component: {fileID: 519420029}
   m_Layer: 0
   m_Name: Main Camera
@@ -493,6 +520,17 @@ AudioListener:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd6fd739b28ae454ca359c681d3a7e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

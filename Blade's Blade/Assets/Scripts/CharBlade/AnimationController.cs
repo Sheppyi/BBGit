@@ -12,47 +12,104 @@ public class AnimationController : MonoBehaviour {
     float currentFrameLength;
     float currentFrameLengthT;
     string currentAnimation = "null";
-    bool flipX = false;
+    int currentLoopFrame = 1;
+    bool playAnimationAfterLastFrame;
+    GameObject currentObject;
 
-    public Sprite[] BladeIdle = new Sprite[11];
+    public Sprite[] BladeIdle = new Sprite[12];
     int BladeIdleFrameRate =10;
     bool BladeIdleLoop = true;
+    int BladeIdleLoopFrame = 1;
 
     public Sprite[] BladeDashHorizontalBackwards = new Sprite[5];
-    int BladeDashHorizontalBackwardsFrameRate = 14;
+    int BladeDashHorizontalBackwardsFrameRate = 11;
     bool BladeDashHorizontalBackwardsLoop = false;
+    int BladeDashHorizontalBackwardsLoopFrame = 1;
 
-    public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation) {
+    public Sprite[] bladeFalling = new Sprite[8];
+    int bladeFallingFrameRate = 15;
+    bool bladeFallingLoop = true;
+    int bladeFallingLoopFrame = 4;
+
+    public Sprite[] bladeJumping = new Sprite[2];
+    int bladeJumpingFrameRate = 20;
+    bool bladeJumpingLoop = true;
+    int bladeJumpingLoopFrame = 2;
+
+    public Sprite[] bladeLanding = new Sprite[9];
+    int bladeLandingFrameRate = 20;
+    bool bladeLandingLoop = false;
+    int bladeLandingLoopFrame = 1;
+
+    public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame) {
         if (animation == currentAnimation && !overrideAnimation) {
             return;
         }
+        currentObject = toChange;
+        currentAnimation = animation;
+        currentLoopFrame = 0;
         currentSpriteRenderer = toChange.GetComponent<SpriteRenderer>();
-        currentSpriteFrame = 0;
+        currentSpriteFrame = startAtFrame;
         currentAnimationLength = 0;
         currentFrameLength = 0;
-        switch (animation) { 
+        switch (animation) {
             case "BladeIdle":
-                currentAnimation = animation;
                 currentFrameLength = 1f / BladeIdleFrameRate;  //f is important for floatpoint division
                 currentFrameLengthT = 0;
                 doesLoop = BladeIdleLoop;
+                currentLoopFrame = BladeIdleLoopFrame;
+                playAnimationAfterLastFrame = false;
                 for (int i = 0; i < BladeIdle.Length; i++) {
                     currentSprite[i] = BladeIdle[i];
                     currentAnimationLength++;
                 }
                 break;
             case "BladeDashHorizontalBackwards":
-                currentAnimation = animation;
                 currentFrameLength = 1f / BladeDashHorizontalBackwardsFrameRate;
                 currentFrameLengthT = 0;
                 doesLoop = BladeDashHorizontalBackwardsLoop;
+                playAnimationAfterLastFrame = false;
+                currentLoopFrame = BladeDashHorizontalBackwardsLoopFrame;
                 for (int i = 0; i < BladeDashHorizontalBackwards.Length; i++) {
                     currentSprite[i] = BladeDashHorizontalBackwards[i];
                     currentAnimationLength++;
                 }
                 break;
+            case "BladeFalling":
+                currentFrameLength = 1f / bladeFallingFrameRate;
+                currentFrameLengthT = 0;
+                doesLoop = bladeFallingLoop;
+                currentLoopFrame = bladeFallingLoopFrame;
+                playAnimationAfterLastFrame = false;
+                for (int i = 0; i < bladeFalling.Length; i++) {
+                    currentSprite[i] = bladeFalling[i];
+                    currentAnimationLength++;
+                }
+                break;
+            case "BladeJumping":
+                currentFrameLength = 1f / bladeJumpingFrameRate;
+                currentFrameLengthT = 0;
+                doesLoop = bladeJumpingLoop;
+                currentLoopFrame = bladeJumpingLoopFrame;
+                playAnimationAfterLastFrame = false;
+                for (int i = 0; i < bladeJumping.Length; i++) {
+                    currentSprite[i] = bladeJumping[i];
+                    currentAnimationLength++;
+                }
+                break;
+            case "BladeLanding":
+                currentFrameLength = 1f / bladeLandingFrameRate;
+                currentFrameLengthT = 0;
+                doesLoop = bladeLandingLoop;
+                currentLoopFrame = bladeLandingLoopFrame;
+                playAnimationAfterLastFrame = true;
+                for (int i = 0; i < bladeLanding.Length; i++) {
+                    currentSprite[i] = bladeLanding[i];
+                    currentAnimationLength++;
+                }
+                break;
             default:
-                Debug.LogWarning("non.existent Animation String passed");
+                Debug.LogWarning("non-existent Animation String passed");
                 break;
         }
         applySprite(currentSprite[currentSpriteFrame]);
@@ -65,8 +122,19 @@ public class AnimationController : MonoBehaviour {
             if (currentFrameLengthT >= currentFrameLength) {
                 currentFrameLengthT = 0;
                 currentSpriteFrame++;
+                if (currentSpriteFrame >= currentAnimationLength && playAnimationAfterLastFrame) {
+                    switch (currentAnimation) {
+                        case "BladeLanding":
+                            PlayAnimation("BladeIdle",currentObject,false,3);
+                            currentObject.GetComponent<Player>().inlandingAnimation = false;
+                            break;
+                        default:
+                            Debug.Log("Automatic animation play after another animation has incorrect string");
+                            break;
+                    }
+                }
                 if (currentSpriteFrame >= currentAnimationLength && doesLoop) {
-                    currentSpriteFrame = 0;
+                    currentSpriteFrame = currentLoopFrame - 1;
                 }
                 if (currentSpriteFrame >= currentAnimationLength && !doesLoop) {
                     currentSpriteFrame = currentAnimationLength - 1;
@@ -76,17 +144,15 @@ public class AnimationController : MonoBehaviour {
         }
     }
 
-        public void applySprite(Sprite sprite){
-            currentSpriteRenderer.sprite = sprite;
-                if(this.GetComponent<Player>().facingDirection == 1){
-                    flipX = false;
-                    currentSpriteRenderer.flipX = false;
-                }
-                else{
-                    flipX = true;
-                    currentSpriteRenderer.flipX = true;
-                }
-        }
+    public void applySprite(Sprite sprite){
+        currentSpriteRenderer.sprite = sprite;
+            if(this.GetComponent<Player>().facingDirection == 1){
+                currentSpriteRenderer.flipX = false;
+            }
+            else{
+                currentSpriteRenderer.flipX = true;
+            }
+    }
 
 
 

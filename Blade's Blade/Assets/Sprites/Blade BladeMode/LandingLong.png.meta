@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: ccf45b85c361fca428cca0f51ef9d4cb
+guid: c3aec1de77ffaea43a36452e1bb7870e
 TextureImporter:
   fileIDToRecycleName:
-    21300000: IdleAnimation_0
-    21300002: IdleAnimation_1
-    21300004: IdleAnimation_2
-    21300006: IdleAnimation_3
-    21300008: IdleAnimation_4
-    21300010: IdleAnimation_5
-    21300012: IdleAnimation_6
-    21300014: IdleAnimation_7
-    21300016: IdleAnimation_8
-    21300018: IdleAnimation_9
-    21300020: IdleAnimation_10
-    21300022: IdleAnimation_11
+    21300000: LandingLong_0
+    21300002: LandingLong_1
+    21300004: LandingLong_2
+    21300006: LandingLong_3
+    21300008: LandingLong_4
+    21300010: LandingLong_5
+    21300012: LandingLong_6
+    21300014: LandingLong_7
+    21300016: LandingLong_8
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -94,67 +91,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IdleAnimation_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 240
-        width: 80
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6a1d6bcf5748af1499aa3ba50d74e458
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IdleAnimation_1
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 240
-        width: 80
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 97dfdeb329b80a744a557d9a68476cff
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IdleAnimation_2
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 240
-        width: 80
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9eb04577e4e805249b7552f18b798126
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IdleAnimation_3
+      name: LandingLong_0
       rect:
         serializedVersion: 2
         x: 0
@@ -168,13 +105,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5d7bdd31463babb4bacf40c77b287dd2
+      spriteID: 479eab4428a58af4a852c3c500b48aa4
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_4
+      name: LandingLong_1
       rect:
         serializedVersion: 2
         x: 80
@@ -188,13 +125,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a34e05f4e2a478b44abed96bb7575391
+      spriteID: f5ce40aa4979787418dafa35db140fe6
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_5
+      name: LandingLong_2
       rect:
         serializedVersion: 2
         x: 160
@@ -208,13 +145,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 966332f645199d34595f538b68d55697
+      spriteID: 75c9bca48f2842943977a877569fcd43
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_6
+      name: LandingLong_3
       rect:
         serializedVersion: 2
         x: 0
@@ -228,13 +165,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa085a99e3a3c81488abb592958eb727
+      spriteID: c65de9555ffdff4449aed969270e98fb
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_7
+      name: LandingLong_4
       rect:
         serializedVersion: 2
         x: 80
@@ -248,13 +185,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 086031e9d07abfc48ac111e81f78a2f4
+      spriteID: 5e682bec64dda6b4da5acfa91fdb5423
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_8
+      name: LandingLong_5
       rect:
         serializedVersion: 2
         x: 160
@@ -268,13 +205,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b253c8e2d5f71994cbab66d31db024ce
+      spriteID: 39d44714aa2713c48bdd0ced292621c7
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_9
+      name: LandingLong_6
       rect:
         serializedVersion: 2
         x: 0
@@ -288,13 +225,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ef254e693c61d0747b3b72fda340383f
+      spriteID: 624b1893c232d41488fe8c09b6abe5f6
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_10
+      name: LandingLong_7
       rect:
         serializedVersion: 2
         x: 80
@@ -308,13 +245,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1de0dad7923736045b683696cc7f8420
+      spriteID: cb14feceeb8a05e45a1030fb8ab9bd9b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IdleAnimation_11
+      name: LandingLong_8
       rect:
         serializedVersion: 2
         x: 160
@@ -328,7 +265,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c53af045b8a32734fbd9aa57e3f6d33b
+      spriteID: 6e4cdc449ce617a4aa62d3e8afdcb842
       vertices: []
       indices: 
       edges: []
@@ -336,7 +273,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: bc2d819cd0b276546bb33c87b4200ec2
+    spriteID: 0870b029c4442cd4296fbe52583aa830
     vertices: []
     indices: 
     edges: []
