@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
     float jumpHeight = 4;
     float timeToJumpApex = 0.35f;
     float accelerationAmount = 50;
-    float maxHorizontalMovementSpeed = 12;
+    float maxHorizontalMovementSpeed = 9;
     float maxVerticalMovementSpeed = 20;
     float airborneModifier = 0.5f;
     float gravityReductionAmount = 0.6f;        //reduction when holding space  (1 is 1:1 (lower is more))
