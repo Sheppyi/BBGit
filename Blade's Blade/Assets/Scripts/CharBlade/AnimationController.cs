@@ -46,83 +46,92 @@ public class AnimationController : MonoBehaviour {
     bool bladeRunningLoop = true;
     int bladeRunningLoopFrame = 1;
 
-    public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame) {
-        if (animation == currentAnimation && !overrideAnimation) {
+    public Sprite[] bladeAccel = new Sprite[6];
+    int bladeAccelFrameRate = 12;
+    bool bladeAccelLoop = true;
+    int bladeAccelLoopFrame = 1;
+
+    //THIS PLAYS AN ANIMATION   (THE ANIMATION NAME, THE GAMEOBJECT THAT THE ANIMATION WILL BE APPLIED TO, WEATHER THE ANIMATION WILL RESET ITSELF IF CALLED AGAIN,THE STARTING FRAME, NAME OF THE ANIMATION A SMOOTH TRANSITION IS DONE WITH)
+    public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame, string smoothTransitionWithAnimation = null) {
+        if (animation == currentAnimation && !overrideAnimation) {      //exits if an animation that is already running is called again                                 <-----------
             return;
         }
-        currentObject = toChange;
-        currentAnimation = animation;
-        currentLoopFrame = 0;
-        currentSpriteRenderer = toChange.GetComponent<SpriteRenderer>();
-        currentSpriteFrame = startAtFrame;
-        currentAnimationLength = 0;
-        currentFrameLength = 0;
-        playAnimationAfterLastFrame = false;
+        if (smoothTransitionWithAnimation != currentAnimation) {        //allows for smooth transition
+            currentSpriteFrame = startAtFrame;
+            currentFrameLengthT = 0;
+        }
+        currentObject = toChange;                                               //the object that called the function
+        currentSpriteRenderer = toChange.GetComponent<SpriteRenderer>();        //the SpriteRenderer that called the function
+        currentAnimation = animation;                                           //saves the animation string locally to compare with new animations that are being called. See above 
         switch (animation) {
             case "BladeIdle":
                 currentFrameLength = 1f / BladeIdleFrameRate;  //f is important for floatpoint division
-                currentFrameLengthT = 0;
                 doesLoop = BladeIdleLoop;
                 currentLoopFrame = BladeIdleLoopFrame;
                 playAnimationAfterLastFrame = false;
+                currentAnimationLength = BladeIdle.Length;
                 for (int i = 0; i < BladeIdle.Length; i++) {
                     currentSprite[i] = BladeIdle[i];
-                    currentAnimationLength++;
                 }
                 break;
             case "BladeDashHorizontalBackwards":
                 currentFrameLength = 1f / BladeDashHorizontalBackwardsFrameRate;
-                currentFrameLengthT = 0;
                 doesLoop = BladeDashHorizontalBackwardsLoop;
                 playAnimationAfterLastFrame = false;
                 currentLoopFrame = BladeDashHorizontalBackwardsLoopFrame;
+                currentAnimationLength = BladeDashHorizontalBackwards.Length;
                 for (int i = 0; i < BladeDashHorizontalBackwards.Length; i++) {
                     currentSprite[i] = BladeDashHorizontalBackwards[i];
-                    currentAnimationLength++;
                 }
                 break;
             case "BladeFalling":
                 currentFrameLength = 1f / bladeFallingFrameRate;
-                currentFrameLengthT = 0;
                 doesLoop = bladeFallingLoop;
                 currentLoopFrame = bladeFallingLoopFrame;
                 playAnimationAfterLastFrame = false;
+                currentAnimationLength = bladeFalling.Length;
                 for (int i = 0; i < bladeFalling.Length; i++) {
                     currentSprite[i] = bladeFalling[i];
-                    currentAnimationLength++;
                 }
                 break;
             case "BladeJumping":
                 currentFrameLength = 1f / bladeJumpingFrameRate;
-                currentFrameLengthT = 0;
                 doesLoop = bladeJumpingLoop;
                 currentLoopFrame = bladeJumpingLoopFrame;
                 playAnimationAfterLastFrame = false;
+                currentAnimationLength = bladeJumping.Length;
                 for (int i = 0; i < bladeJumping.Length; i++) {
                     currentSprite[i] = bladeJumping[i];
-                    currentAnimationLength++;
                 }
                 break;
             case "BladeLanding":
                 currentFrameLength = 1f / bladeLandingFrameRate;
-                currentFrameLengthT = 0;
                 doesLoop = bladeLandingLoop;
                 currentLoopFrame = bladeLandingLoopFrame;
                 playAnimationAfterLastFrame = true;
+                currentAnimationLength = bladeLanding.Length;
                 for (int i = 0; i < bladeLanding.Length; i++) {
                     currentSprite[i] = bladeLanding[i];
-                    currentAnimationLength++;
                 }
                 break;
             case "BladeRunning":
                 currentFrameLength = 1f / bladeRunningFrameRate;
-                currentFrameLengthT = 0;
                 doesLoop = bladeRunningLoop;
                 currentLoopFrame = bladeRunningLoopFrame;
                 playAnimationAfterLastFrame = false;
+                currentAnimationLength = bladeRunning.Length;
                 for (int i = 0; i < bladeRunning.Length; i++) {
                     currentSprite[i] = bladeRunning[i];
-                    currentAnimationLength++;
+                }
+                break;
+            case "BladeAccel":
+                currentFrameLength = 1f / bladeAccelFrameRate;
+                doesLoop = bladeAccelLoop;
+                currentLoopFrame = bladeAccelLoopFrame;
+                playAnimationAfterLastFrame = false;
+                currentAnimationLength = bladeAccel.Length;
+                for (int i = 0; i < bladeAccel.Length; i++) {
+                    currentSprite[i] = bladeAccel[i];
                 }
                 break;
             default:
@@ -142,7 +151,7 @@ public class AnimationController : MonoBehaviour {
                 if (currentSpriteFrame >= currentAnimationLength && playAnimationAfterLastFrame) {
                     switch (currentAnimation) {
                         case "BladeLanding":
-                            PlayAnimation("BladeIdle",currentObject,false,3);
+                            PlayAnimation("BladeIdle",currentObject,false, 3);
                             currentObject.GetComponent<Player>().inlandingAnimation = false;
                             break;
                         default:

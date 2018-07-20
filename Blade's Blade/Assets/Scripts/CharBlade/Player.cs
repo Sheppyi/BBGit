@@ -189,10 +189,10 @@ public class Player : MonoBehaviour {
             }
             else {
                 if (velocity.x >= maxHorizontalMovementSpeed) {
-                    animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0);
+                    animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0, "BladeAccel");
                 }
                 else {
-                    //accel animation
+                    animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0);
                 }
             }
             if (velocity.x + accelerationAmount * Time.deltaTime < maxHorizontalMovementSpeed) {
@@ -217,10 +217,11 @@ public class Player : MonoBehaviour {
         if (!airborne) {
             if (facingDirection == -1) {
                 if (velocity.x <= -maxHorizontalMovementSpeed) {
-                    animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0);
+                    animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0, "BladeAccel");
                 }
                 else {
                     //accel animation
+                    animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0);
                 }
             }
             else {
@@ -279,14 +280,13 @@ public class Player : MonoBehaviour {
                 }
             }
         }
-            
     }
 
     void MovJump() {
         inlandingAnimation = false;
         velocity.y += jumpVelocity;
         airborne = true;
-        animationController.PlayAnimation("BladeJumping",this.gameObject,false,0);
+        animationController.PlayAnimation("BladeJumping", this.gameObject, false, 0);
     }
 
     void CheckDash(){
