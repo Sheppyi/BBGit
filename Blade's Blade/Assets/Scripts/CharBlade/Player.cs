@@ -26,21 +26,24 @@ public class Player : MonoBehaviour {
     float dashDoubleClickSpeedTD = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
     float dashLengthT = 0;                  //is used internally to measure and time the lenght of the dash
     float dashCooldownT = 0;
+    bool wasFullSpeed = false;              //turns true if the player hit full speed before velocity.x == 0. Used for animation
     bool inDash = false;                    //is the player in Dash or not
     int AirDashesT = 0;                     //the number of airdashes that are left 
     float dashActivationDelayT = 0;         //is used internally to measure and time the activation Delay for the dash
     public int facingDirection = 1;         //This is the direction the player is facing in  LEAVE PUBLIC PLS K THX
+    int oldFacingDirection;                 //previous direction
     bool airborne = true;                   //Is the player in the Air or not?
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement props
     float jumpHeight = 4;                       //the Height that the player jumps
     float timeToJumpApex = 0.35f;               //Time to reach the highest point of the jump
-    float accelerationAmount = 40;              //the speed that is added each second.
+    float accelerationAmount = 50;              //the speed that is added each second.
     float maxHorizontalMovementSpeed = 14;      //the maximum horizontal speed. THIS ISNT GLOBAL AND NEEDS TO BE CODED INTO A FUNCTION IF YOU WANT TO USE IT  
     float maxVerticalMovementSpeed = 20;        //the maximum vertical speed. THIS ISNT GLOBAL AND NEEDS TO BE CODED INTO A FUNCTION IF YOU WANT TO USE IT
     float airborneModifier = 0.5f;              //when holding a how much is the gravity reduced?
     float gravityReductionAmount = 0.6f;        //reduction when holding space  (1 is 1:1 (lower is more))
-    float airbornRotationDeadZone = 3f;
+    float airbornRotationDeadZone = 3f;         //how fast you need to move in the air (x) in order to change the direction the player is facing in
+    float noInputStopping = 1.8f;                 //this adjusts the time the character needs to stop when the player is not pressing any inputs. 2 means twice as long as when he was pressing to the opposite direction
     //animation
     float fallingAnimationThreshold = -3;       //speed needed for falling animation to play
     public bool inlandingAnimation = false;     //needs to be public for animator
@@ -72,6 +75,10 @@ public class Player : MonoBehaviour {
     private void Update() {
         //initialization
         oldVelocity = velocity;
+        if (oldFacingDirection != facingDirection) {
+            oldFacingDirection = facingDirection;
+            wasFullSpeed = false;
+        }
         if (movementController.collisions.above || movementController.collisions.below) {           //velocity reset vertical collision
             velocity.y = 0;
             AirDashesT = 0;
@@ -180,6 +187,12 @@ public class Player : MonoBehaviour {
             animationController.PlayAnimation("BladeFalling", this.gameObject, false, 0);
         }
 
+        if (Mathf.Abs(velocity.x) == maxHorizontalMovementSpeed) {
+            wasFullSpeed = true;
+        }else if (velocity.x == 0) {
+            wasFullSpeed = false;
+        }
+
         //finish
         movementController.Move(velocity * Time.deltaTime);
         Physics2D.SyncTransforms(); //sync hitbox after transform
@@ -191,6 +204,7 @@ public class Player : MonoBehaviour {
         if (!airborne) {
             if (facingDirection == -1) {
                 //brake animation
+                animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
                 inlandingAnimation = false;
             }
             else {
@@ -202,6 +216,7 @@ public class Player : MonoBehaviour {
                 else {
                     //accelanimation
                     animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0);
+                    inlandingAnimation = false;
                 }
             }
             if (velocity.x + accelerationAmount * Time.deltaTime < maxHorizontalMovementSpeed) {
@@ -232,10 +247,12 @@ public class Player : MonoBehaviour {
                 else {
                     //accel animation
                     animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0);
+                    inlandingAnimation = false;
                 }
             }
             else {
                 //brake animatino
+                animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
                 inlandingAnimation = false;
             }
             if (velocity.x - accelerationAmount * Time.deltaTime > -maxHorizontalMovementSpeed) {
@@ -259,21 +276,42 @@ public class Player : MonoBehaviour {
     void MovMoveNone() {
         if (!airborne) {
             if (facingDirection == -1) {
-                velocity.x += accelerationAmount * Time.deltaTime;
+                velocity.x += accelerationAmount * Time.deltaTime / noInputStopping;
                 if (velocity.x > 0) {
                     velocity.x = 0;
                 }
+                else if (velocity.x > -8 && animationController.currentAnimation != "BladeBrakeToIdle") {
+                    if (wasFullSpeed) {
+                        animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                    }
+                    else {
+                        animationController.PlayAnimation("BladeSoftBrake", this.gameObject, false, 0);
+                    }
+                }
+                else {
+                    animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0, "BladeRunning");
+                }
             }
             else {
-                velocity.x -= accelerationAmount * Time.deltaTime;
+                velocity.x -= accelerationAmount * Time.deltaTime / noInputStopping;
                 if (velocity.x < 0) {
                     velocity.x = 0;
+                }
+                else if (velocity.x < 8 && animationController.currentAnimation != "BladeBrakeToIdle") {
+                    if (wasFullSpeed) {
+                        animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                    }
+                    else {
+                        animationController.PlayAnimation("BladeSoftBrake", this.gameObject, false, 0);
+                    }                
+                }
+                else {
+                    animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0, "BladeRunning");
                 }
             }
             //animation
             if (velocity.x == 0 && velocity.y == 0 && !inDash && !inlandingAnimation) {
-                    animationController.PlayAnimation("BladeIdle", this.gameObject, false, 0);
-
+                animationController.PlayAnimation("BladeIdle", this.gameObject, false, 0);
             }
         }
         else {
@@ -394,9 +432,16 @@ public class Player : MonoBehaviour {
                 dashCooldownT = dashLength;
             }
             //animation
-            if((direction == Vector2.left && facingDirection == 1)||(direction == Vector2.right && facingDirection == -1)) {
-                animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true, 0); 
+            if (airborne) {
+                if ((direction == Vector2.left && facingDirection == 1) || (direction == Vector2.right && facingDirection == -1)) {
+                    animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true, 0);
                 }
+            }
+            else {
+                if ((direction == Vector2.left && facingDirection == -1) || (direction == Vector2.right && facingDirection == 1)) {
+                    animationController.PlayAnimation("BladeDashHorzontalForwardGrounded", this.gameObject, true, 0);
+                }
+            }
         }
         else {
         	movementController.Move(new Vector2(0, -0.01f));	//to recheck collision
