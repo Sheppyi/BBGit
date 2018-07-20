@@ -5,7 +5,7 @@ using UnityEngine;
 public class AnimationController : MonoBehaviour {
 
     SpriteRenderer currentSpriteRenderer;
-    int currentSpriteFrame = 0;
+    public int currentSpriteFrame = 0;
     Sprite[] currentSprite = new Sprite[50];    //kann so groß sein wie will nur nicht zu klein
     int currentAnimationLength;
     bool doesLoop;                   
@@ -47,7 +47,7 @@ public class AnimationController : MonoBehaviour {
     int bladeRunningLoopFrame = 1;
 
     public Sprite[] bladeAccel = new Sprite[6];
-    int bladeAccelFrameRate = 12;
+    int bladeAccelFrameRate = 10;
     bool bladeAccelLoop = true;
     int bladeAccelLoopFrame = 1;
 

@@ -25,6 +25,7 @@ public class Player : MonoBehaviour {
     float dashDoubleClickSpeedTU = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
     float dashDoubleClickSpeedTD = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
     float dashLengthT = 0;                  //is used internally to measure and time the lenght of the dash
+    float dashCooldownT = 0;
     bool inDash = false;                    //is the player in Dash or not
     int AirDashesT = 0;                     //the number of airdashes that are left 
     float dashActivationDelayT = 0;         //is used internally to measure and time the activation Delay for the dash
@@ -51,8 +52,8 @@ public class Player : MonoBehaviour {
     float dashLength = 0.1f;                    //the length of the dash in seconds
     Vector2 dashExitSpeed = new Vector2(0,0);   //the speed the dash exits with
     static int AirDashes = 2;                   //the number of airdashes available to the player (maybe add upgrades in the future)
-    float dashActivationDelay = 0.3f;           //the for the gravity to reactivate. A second dash can be cast after the dashLength;  !This is skipped if the player touches the ground OR the ceiling  OR the player moves in the air!
-
+    float dashActivationDelay = 0.3f;           //the for the gravity to reactivate.  !This is skipped if the player touches the ground OR the ceiling  OR the player moves in the air!
+    float dashCooldown = 0.3f;                  //the cooldown of the dash 
 
 
 
@@ -95,13 +96,13 @@ public class Player : MonoBehaviour {
         if (velocity.y != 0) { airborne = true; }                                   //airborn
 
         //timing
-        if (dashLengthT < dashLength + 0.1f) {
+        if (dashLengthT < dashLength + 0.1f) {                          //dash length
             dashLengthT += Time.deltaTime;
             if(dashLengthT >= dashLength) {
                 MovDash(dashExitSpeed , false);
             }
         }
-        if (dashActivationDelayT < dashActivationDelay + 0.1f && !gravityEnabled) {
+        if (dashActivationDelayT < dashActivationDelay + 0.1f && !gravityEnabled) { //dash activationd elay
             dashActivationDelayT += Time.deltaTime;
             if (dashActivationDelayT >= dashActivationDelay) {
                 gravityEnabled = true;
@@ -113,6 +114,11 @@ public class Player : MonoBehaviour {
                 gravityEnabled = true;
                 dashActivationDelayT = dashActivationDelay + 0.2f;
             }
+        }
+        if (dashCooldownT > 0) {     //dashcooldown
+            dashCooldownT -= Time.deltaTime;
+        }else {
+            dashEnabled = true;
         }
         
         //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -182,16 +188,19 @@ public class Player : MonoBehaviour {
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement functions
     void MovMoveRight() {
-        inlandingAnimation = false;
         if (!airborne) {
             if (facingDirection == -1) {
-               //brake animation
+                //brake animation
+                inlandingAnimation = false;
             }
             else {
                 if (velocity.x >= maxHorizontalMovementSpeed) {
+                    //running animation
                     animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0, "BladeAccel");
+                    inlandingAnimation = false;
                 }
                 else {
+                    //accelanimation
                     animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0);
                 }
             }
@@ -213,11 +222,12 @@ public class Player : MonoBehaviour {
     }
 
     void MovMoveLeft() {
-        inlandingAnimation = false;
         if (!airborne) {
             if (facingDirection == -1) {
                 if (velocity.x <= -maxHorizontalMovementSpeed) {
+                    //running animation
                     animationController.PlayAnimation("BladeRunning", this.gameObject, false, 0, "BladeAccel");
+                    inlandingAnimation = false;
                 }
                 else {
                     //accel animation
@@ -226,6 +236,7 @@ public class Player : MonoBehaviour {
             }
             else {
                 //brake animatino
+                inlandingAnimation = false;
             }
             if (velocity.x - accelerationAmount * Time.deltaTime > -maxHorizontalMovementSpeed) {
                 velocity.x -= accelerationAmount * Time.deltaTime;
@@ -376,6 +387,12 @@ public class Player : MonoBehaviour {
             velocity = direction * dashSpeed;
             dashLengthT = 0;
             AirDashesT++;
+            if (!airborne) {
+                dashCooldownT = dashCooldown;
+            }
+            else {
+                dashCooldownT = dashLength;
+            }
             //animation
             if((direction == Vector2.left && facingDirection == 1)||(direction == Vector2.right && facingDirection == -1)) {
                 animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true, 0); 
@@ -392,7 +409,6 @@ public class Player : MonoBehaviour {
                 dashActivationDelayT = 0;
             }
             jumpEnabled = true;
-            dashEnabled = true;
             inDash = false;
             lockDirection = false;
             dashLengthT = dashLength + 0.1f;
