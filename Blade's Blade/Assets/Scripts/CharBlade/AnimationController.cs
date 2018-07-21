@@ -21,15 +21,31 @@ public class AnimationController : MonoBehaviour {
     bool BladeIdleLoop = true;
     int BladeIdleLoopFrame = 1;
 
-    public Sprite[] BladeDashHorizontalBackwards = new Sprite[5];
-    int BladeDashHorizontalBackwardsFrameRate = 11;
-    bool BladeDashHorizontalBackwardsLoop = false;
-    int BladeDashHorizontalBackwardsLoopFrame = 1;
+    public Sprite[] bladeDashHorizontalBackwards = new Sprite[5];
+    int bladeDashHorizontalBackwardsFrameRate = 20;
+    bool bladeDashHorizontalBackwardsLoop = false;
+    int bladeDashHorizontalBackwardsLoopFrame = 1;
 
-    public Sprite[] bladeDashHorzontalForwardGrounded = new Sprite[2];
-    int bladeDashHorzontalForwardGroundedFrameRate = 15;
-    bool bladeDashHorzontalForwardGroundedLoop = false;
-    int bladeDashHorzontalForwardGroundedLoopFrame = 1;
+    public Sprite[] bladeDashHorizontalBackwardsGrounded= new Sprite[10];
+    int bladeDashHorizontalBackwardsGroundedFrameRate = 20;
+    bool bladeDashHorizontalBackwardsGroundedLoop = false;
+    int bladeDashHorizontalBackwardsGroundedLoopFrame = 1;
+
+    public Sprite[] bladeDashHorizontalForward = new Sprite[5];
+    int bladeDashHorizontalForwardFrameRate = 20;
+    bool bladeDashHorizontalForwardLoop = false;
+    int bladeDashHorizontalForwardLoopFrame = 1;
+
+    public Sprite[] bladeDashHorizontalForwardGrounded = new Sprite[3];
+    int bladeDashHorizontalForwardGroundedFrameRate = 20;
+    bool bladeDashHorizontalForwardGroundedLoop = false;
+    int bladeDashHorizontalForwardGroundedLoopFrame = 1;
+
+
+    public Sprite[] bladeDashUp = new Sprite[5];
+    int bladeDashUpFrameRate = 15;
+    bool bladeDashUpLoop = false;
+    int bladeDashUpLoopFrame = 1;
 
     public Sprite[] bladeFalling = new Sprite[8];
     int bladeFallingFrameRate = 15;
@@ -73,7 +89,8 @@ public class AnimationController : MonoBehaviour {
 
     //THIS PLAYS AN ANIMATION   (THE ANIMATION NAME, THE GAMEOBJECT THAT THE ANIMATION WILL BE APPLIED TO, WEATHER THE ANIMATION WILL RESET ITSELF IF CALLED AGAIN,THE STARTING FRAME, NAME OF THE ANIMATION A SMOOTH TRANSITION IS DONE WITH)
     public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame, string smoothTransitionWithAnimation = null) {
-        if ((animation == currentAnimation && !overrideAnimation) || (animation == "BladeIdle" && (currentAnimation == "BladeBrake" || currentAnimation == "BladeBrakeToIdle"))) {      //exits if an animation that is already running is called again                                 <-----------
+        //exits if an animation that is already running is called again                                 <-----------
+        if ((animation == currentAnimation && !overrideAnimation) || (!overrideAnimation && animation == "BladeIdle" && (currentAnimation == "BladeBrake" || currentAnimation == "BladeBrakeToIdle" || currentAnimation == "BladeDashHorizontalBackwardsGrounded"))) {
             return;
         }
         if (smoothTransitionWithAnimation != currentAnimation) {        //allows for smooth transition
@@ -95,23 +112,53 @@ public class AnimationController : MonoBehaviour {
                 }
                 break;
             case "BladeDashHorizontalBackwards":
-                currentFrameLength = 1f / BladeDashHorizontalBackwardsFrameRate;
-                doesLoop = BladeDashHorizontalBackwardsLoop;
+                currentFrameLength = 1f / bladeDashHorizontalBackwardsFrameRate;
+                doesLoop = bladeDashHorizontalBackwardsLoop;
                 playAnimationAfterLastFrame = false;
-                currentLoopFrame = BladeDashHorizontalBackwardsLoopFrame;
-                currentAnimationLength = BladeDashHorizontalBackwards.Length;
-                for (int i = 0; i < BladeDashHorizontalBackwards.Length; i++) {
-                    currentSprite[i] = BladeDashHorizontalBackwards[i];
+                currentLoopFrame = bladeDashHorizontalBackwardsLoopFrame;
+                currentAnimationLength = bladeDashHorizontalBackwards.Length;
+                for (int i = 0; i < bladeDashHorizontalBackwards.Length; i++) {
+                    currentSprite[i] = bladeDashHorizontalBackwards[i];
                 }
                 break;
-            case "BladeDashHorzontalForwardGrounded":
-                currentFrameLength = 1f / bladeDashHorzontalForwardGroundedFrameRate;
-                doesLoop = bladeDashHorzontalForwardGroundedLoop;
+            case "BladeDashHorizontalForward":
+                currentFrameLength = 1f / bladeDashHorizontalForwardFrameRate;
+                doesLoop = bladeDashHorizontalForwardLoop;
                 playAnimationAfterLastFrame = false;
-                currentLoopFrame = bladeDashHorzontalForwardGroundedLoopFrame;
-                currentAnimationLength = bladeDashHorzontalForwardGrounded.Length;
-                for (int i = 0; i < bladeDashHorzontalForwardGrounded.Length; i++) {
-                    currentSprite[i] = bladeDashHorzontalForwardGrounded[i];
+                currentLoopFrame = bladeDashHorizontalForwardLoopFrame;
+                currentAnimationLength = bladeDashHorizontalForward.Length;
+                for (int i = 0; i < bladeDashHorizontalForward.Length; i++) {
+                    currentSprite[i] = bladeDashHorizontalForward[i];
+                }
+                break;
+            case "BladeDashHorizontalBackwardsGrounded":
+                currentFrameLength = 1f / bladeDashHorizontalBackwardsGroundedFrameRate;
+                doesLoop = bladeDashHorizontalBackwardsGroundedLoop;
+                playAnimationAfterLastFrame = true;
+                currentLoopFrame = bladeDashHorizontalBackwardsGroundedLoopFrame;
+                currentAnimationLength = bladeDashHorizontalBackwardsGrounded.Length;
+                for (int i = 0; i < bladeDashHorizontalBackwardsGrounded.Length; i++) {
+                    currentSprite[i] = bladeDashHorizontalBackwardsGrounded[i];
+                }
+                break;
+            case "BladeDashHorizontalForwardGrounded":
+                currentFrameLength = 1f / bladeDashHorizontalForwardGroundedFrameRate;
+                doesLoop = bladeDashHorizontalForwardGroundedLoop;
+                playAnimationAfterLastFrame = false;
+                currentLoopFrame = bladeDashHorizontalForwardGroundedLoopFrame;
+                currentAnimationLength = bladeDashHorizontalForwardGrounded.Length;
+                for (int i = 0; i < bladeDashHorizontalForwardGrounded.Length; i++) {
+                    currentSprite[i] = bladeDashHorizontalForwardGrounded[i];
+                }
+                break;
+            case "BladeDashUp":
+                currentFrameLength = 1f / bladeDashUpFrameRate;
+                doesLoop = bladeDashUpLoop;
+                currentLoopFrame = bladeDashUpLoopFrame;
+                playAnimationAfterLastFrame = false;
+                currentAnimationLength = bladeDashUp.Length;
+                for (int i = 0; i < bladeDashUp.Length; i++) {
+                    currentSprite[i] = bladeDashUp[i];
                 }
                 break;
             case "BladeFalling":
@@ -203,9 +250,6 @@ public class AnimationController : MonoBehaviour {
 
 
     public void Update() {
-        if (currentAnimation == "BladeAccel") {
-            currentFrameLength = 0.8f / Mathf.Abs(gameObject.GetComponent<Player>().velocity.x);
-        }
         if (currentSpriteRenderer != null) {
             currentFrameLengthT += Time.deltaTime;
             if (currentFrameLengthT >= currentFrameLength) {
@@ -223,6 +267,9 @@ public class AnimationController : MonoBehaviour {
                             break;
                         case "BladeBrake":
                             PlayAnimation("BladeBrakeToIdle", currentObject, false, 1);
+                            break;
+                        case "BladeDashHorizontalBackwardsGrounded":
+                            PlayAnimation("BladeIdle", currentObject, true, 3);
                             break;
                         default:
                             Debug.Log("Automatic animation play after another animation has incorrect string");

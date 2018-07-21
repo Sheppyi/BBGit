@@ -332,7 +332,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.13481516}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -343,7 +343,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5163312, y: 1}
+  m_Size: {x: 0.49658662, y: 0.7303697}
   m_EdgeRadius: 0
 --- !u!114 &219468729
 MonoBehaviour:
@@ -371,15 +371,39 @@ MonoBehaviour:
   - {fileID: 21300018, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
   - {fileID: 21300020, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
   - {fileID: 21300022, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
-  BladeDashHorizontalBackwards:
-  - {fileID: 21300000, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
-  - {fileID: 21300002, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
-  - {fileID: 21300004, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
-  - {fileID: 21300006, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
-  - {fileID: 21300008, guid: 0e40006bd913d304cbfbf97b4446a706, type: 3}
-  bladeDashHorzontalForwardGrounded:
+  bladeDashHorizontalBackwards:
+  - {fileID: 21300000, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300002, guid: b53496c4af545124cb151719d17be3ab, type: 3}
+  - {fileID: 21300004, guid: b53496c4af545124cb151719d17be3ab, type: 3}
+  - {fileID: 21300000, guid: 38252d09619237e4d9824f48e6f70f83, type: 3}
+  - {fileID: 21300000, guid: ccf45b85c361fca428cca0f51ef9d4cb, type: 3}
+  bladeDashHorizontalBackwardsGrounded:
+  - {fileID: 21300000, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300002, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300004, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300006, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300008, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300010, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300012, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300014, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300016, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  - {fileID: 21300018, guid: 4d845799902ea6847978fe317ee3b168, type: 3}
+  bladeDashHorizontalForward:
+  - {fileID: 21300000, guid: 1ce8a6b30af8cfb4e968dcada510ae3e, type: 3}
+  - {fileID: 21300002, guid: 1ce8a6b30af8cfb4e968dcada510ae3e, type: 3}
+  - {fileID: 21300004, guid: 1ce8a6b30af8cfb4e968dcada510ae3e, type: 3}
+  - {fileID: 21300006, guid: 1ce8a6b30af8cfb4e968dcada510ae3e, type: 3}
+  - {fileID: 21300008, guid: 1ce8a6b30af8cfb4e968dcada510ae3e, type: 3}
+  bladeDashHorizontalForwardGrounded:
   - {fileID: 21300000, guid: e56538ebbbc84d243882c50ba288bebd, type: 3}
   - {fileID: 21300002, guid: e56538ebbbc84d243882c50ba288bebd, type: 3}
+  - {fileID: 21300004, guid: e56538ebbbc84d243882c50ba288bebd, type: 3}
+  bladeDashUp:
+  - {fileID: 21300000, guid: 8825e8e46b7c64b4f8bb702c235ae917, type: 3}
+  - {fileID: 21300002, guid: 8825e8e46b7c64b4f8bb702c235ae917, type: 3}
+  - {fileID: 21300004, guid: 8825e8e46b7c64b4f8bb702c235ae917, type: 3}
+  - {fileID: 21300006, guid: 8825e8e46b7c64b4f8bb702c235ae917, type: 3}
+  - {fileID: 21300008, guid: 8825e8e46b7c64b4f8bb702c235ae917, type: 3}
   bladeFalling:
   - {fileID: 21300000, guid: c847956741f28f240bba3e273121d9d1, type: 3}
   - {fileID: 21300002, guid: c847956741f28f240bba3e273121d9d1, type: 3}

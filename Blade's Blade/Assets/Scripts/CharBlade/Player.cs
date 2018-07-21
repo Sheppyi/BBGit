@@ -193,6 +193,10 @@ public class Player : MonoBehaviour {
             wasFullSpeed = false;
         }
 
+        if (airborne) {
+            wasFullSpeed = false;
+        }
+
         //finish
         movementController.Move(velocity * Time.deltaTime);
         Physics2D.SyncTransforms(); //sync hitbox after transform
@@ -283,13 +287,16 @@ public class Player : MonoBehaviour {
                 else if (velocity.x > -8 && animationController.currentAnimation != "BladeBrakeToIdle") {
                     if (wasFullSpeed) {
                         animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                        inlandingAnimation = false;
                     }
                     else {
                         animationController.PlayAnimation("BladeSoftBrake", this.gameObject, false, 0);
+                        inlandingAnimation = false;
                     }
                 }
                 else {
                     animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0, "BladeRunning");
+                    inlandingAnimation = false;
                 }
             }
             else {
@@ -300,13 +307,16 @@ public class Player : MonoBehaviour {
                 else if (velocity.x < 8 && animationController.currentAnimation != "BladeBrakeToIdle") {
                     if (wasFullSpeed) {
                         animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                        inlandingAnimation = false;
                     }
                     else {
                         animationController.PlayAnimation("BladeSoftBrake", this.gameObject, false, 0);
+                        inlandingAnimation = false;
                     }                
                 }
                 else {
                     animationController.PlayAnimation("BladeAccel", this.gameObject, false, 0, "BladeRunning");
+                    inlandingAnimation = false;
                 }
             }
             //animation
@@ -432,14 +442,23 @@ public class Player : MonoBehaviour {
                 dashCooldownT = dashLength;
             }
             //animation
-            if (airborne) {
+            if (direction == Vector2.up) {
+                animationController.PlayAnimation("BladeDashUp", this.gameObject, false, 0);
+            }
+            else if (airborne) {
                 if ((direction == Vector2.left && facingDirection == 1) || (direction == Vector2.right && facingDirection == -1)) {
                     animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true, 0);
+                }
+                else if (direction == Vector2.left || direction == Vector2.right) {
+                    animationController.PlayAnimation("BladeDashHorizontalForward", this.gameObject, true, 0);
                 }
             }
             else {
                 if ((direction == Vector2.left && facingDirection == -1) || (direction == Vector2.right && facingDirection == 1)) {
-                    animationController.PlayAnimation("BladeDashHorzontalForwardGrounded", this.gameObject, true, 0);
+                    animationController.PlayAnimation("BladeDashHorizontalForwardGrounded", this.gameObject, true, 0);
+                }
+                else if(direction == Vector2.left || direction == Vector2.right){
+                    animationController.PlayAnimation("BladeDashHorizontalBackwardsGrounded", this.gameObject, true, 0);
                 }
             }
         }

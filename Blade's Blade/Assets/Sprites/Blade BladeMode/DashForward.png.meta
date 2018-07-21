@@ -1,10 +1,12 @@
 fileFormatVersion: 2
-guid: e56538ebbbc84d243882c50ba288bebd
+guid: 1ce8a6b30af8cfb4e968dcada510ae3e
 TextureImporter:
   fileIDToRecycleName:
-    21300000: GroundDashForward_0
-    21300002: GroundDashForward_1
-    21300004: GroundDashForward_2
+    21300000: DashForward_0
+    21300002: DashForward_1
+    21300004: DashForward_2
+    21300006: DashForward_3
+    21300008: DashForward_4
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -85,7 +87,47 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GroundDashForward_0
+      name: DashForward_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e98f5fc1b242eae4fa3bfd18a994ea5c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashForward_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 160
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e2a244159bc2c14482fd00d750fa072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashForward_2
       rect:
         serializedVersion: 2
         x: 0
@@ -99,13 +141,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18ad98bf57b59b440a4010b7e03ffee0
+      spriteID: 474d6737552b5ae41aed0467f5bfa9f5
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GroundDashForward_1
+      name: DashForward_3
       rect:
         serializedVersion: 2
         x: 80
@@ -119,13 +161,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1be6f74bc8429b145a55d6556683cdf9
+      spriteID: 38711aa019bd6ea40b92cdd8ec2500d1
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GroundDashForward_2
+      name: DashForward_4
       rect:
         serializedVersion: 2
         x: 0
@@ -139,7 +181,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8adb99980de9c66469a077aed230e6df
+      spriteID: f77269aa81100db46b72fbfb96b9d93f
       vertices: []
       indices: 
       edges: []
@@ -147,7 +189,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 9ac377df471286c48bf50aac2ccb6a3f
+    spriteID: f30a4dac64f07b74d880997848c0d694
     vertices: []
     indices: 
     edges: []
