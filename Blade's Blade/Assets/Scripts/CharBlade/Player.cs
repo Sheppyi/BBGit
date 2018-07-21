@@ -17,7 +17,6 @@ public class Player : MonoBehaviour {
     bool gravityEnabled = true;                 //Is gravity enabled or not?
     bool jumpEnabled = true;                    //is Jumping enabled or not?
     bool dashEnabled = true;                    //is Dash enabled or not?
-    bool allowGravityReduction = true;          //is the Gravity reduction when pressing A enabled or not?
     bool lockDirection = false;                 //is the horizontal velocity not allowed to change the direction the player is facing?
 
     float dashDoubleClickSpeedTR = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
@@ -41,7 +40,6 @@ public class Player : MonoBehaviour {
     float maxHorizontalMovementSpeed = 14;      //the maximum horizontal speed. THIS ISNT GLOBAL AND NEEDS TO BE CODED INTO A FUNCTION IF YOU WANT TO USE IT  
     float maxVerticalMovementSpeed = 20;        //the maximum vertical speed. THIS ISNT GLOBAL AND NEEDS TO BE CODED INTO A FUNCTION IF YOU WANT TO USE IT
     float airborneModifier = 0.5f;              //when holding a how much is the gravity reduced?
-    float gravityReductionAmount = 0.6f;        //reduction when holding space  (1 is 1:1 (lower is more))
     float airbornRotationDeadZone = 3f;         //how fast you need to move in the air (x) in order to change the direction the player is facing in
     float noInputStopping = 1.8f;                 //this adjusts the time the character needs to stop when the player is not pressing any inputs. 2 means twice as long as when he was pressing to the opposite direction
     //animation
@@ -155,12 +153,7 @@ public class Player : MonoBehaviour {
 
         //gravity
         if (gravityEnabled) {
-            if(allowGravityReduction && GetInput.button_A && velocity.y <= 0) {
-                velocity.y += gravity * Time.deltaTime * gravityReductionAmount;
-            }
-            else {
                 velocity.y += gravity * Time.deltaTime;
-            }
             if (velocity.y < -maxVerticalMovementSpeed / 2) {
                 velocity.y = -maxVerticalMovementSpeed;
             }
@@ -183,7 +176,7 @@ public class Player : MonoBehaviour {
         }
 
         //default animations
-        if (velocity.y <= fallingAnimationThreshold) {          //falling
+        if (velocity.y <= fallingAnimationThreshold && !inDash) {          //falling
             animationController.PlayAnimation("BladeFalling", this.gameObject, false, 0);
         }
 
@@ -208,7 +201,14 @@ public class Player : MonoBehaviour {
         if (!airborne) {
             if (facingDirection == -1) {
                 //brake animation
-                animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                if (wasFullSpeed) {
+                    animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                    inlandingAnimation = false;
+                }
+                else {
+                    animationController.PlayAnimation("BladeSoftBrake", this.gameObject, false, 0);
+                    inlandingAnimation = false;
+                }
                 inlandingAnimation = false;
             }
             else {
@@ -256,7 +256,14 @@ public class Player : MonoBehaviour {
             }
             else {
                 //brake animatino
-                animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                if (wasFullSpeed) {
+                    animationController.PlayAnimation("BladeBrake", this.gameObject, false, 0);
+                    inlandingAnimation = false;
+                }
+                else {
+                    animationController.PlayAnimation("BladeSoftBrake", this.gameObject, false, 0);
+                    inlandingAnimation = false;
+                }
                 inlandingAnimation = false;
             }
             if (velocity.x - accelerationAmount * Time.deltaTime > -maxHorizontalMovementSpeed) {
@@ -443,7 +450,9 @@ public class Player : MonoBehaviour {
             }
             //animation
             if (direction == Vector2.up) {
-                animationController.PlayAnimation("BladeDashUp", this.gameObject, false, 0);
+                animationController.PlayAnimation("BladeDashUp", this.gameObject, true, 0);
+            }else if (direction == Vector2.down) {
+                animationController.PlayAnimation("BladeDashDown", this.gameObject, true, 0);
             }
             else if (airborne) {
                 if ((direction == Vector2.left && facingDirection == 1) || (direction == Vector2.right && facingDirection == -1)) {

@@ -16,76 +16,99 @@ public class AnimationController : MonoBehaviour {
     bool playAnimationAfterLastFrame;
     GameObject currentObject;
 
-    public Sprite[] BladeIdle = new Sprite[12];
-    int BladeIdleFrameRate =10;
-    bool BladeIdleLoop = true;
-    int BladeIdleLoopFrame = 1;
+    public ISpriteAnimation bladeIdle = new ISpriteAnimation();
+    public ISpriteAnimation bladeDashBackwards = new ISpriteAnimation();
+    public ISpriteAnimation bladeDashBackwardsGrounded = new ISpriteAnimation();
+    public ISpriteAnimation bladeDashForwards = new ISpriteAnimation();
+    public ISpriteAnimation bladeDashForwardsGrounded = new ISpriteAnimation();
+    public ISpriteAnimation bladeDashUp = new ISpriteAnimation();
+    public ISpriteAnimation bladeFalling = new ISpriteAnimation();
+    public ISpriteAnimation bladeJumping = new ISpriteAnimation();
+    public ISpriteAnimation bladeLanding = new ISpriteAnimation();
+    public ISpriteAnimation bladeRunning = new ISpriteAnimation();
+    public ISpriteAnimation bladeAccel = new ISpriteAnimation();
+    public ISpriteAnimation bladeBrake = new ISpriteAnimation();
+    public ISpriteAnimation bladeSoftBrake = new ISpriteAnimation();
+    public ISpriteAnimation bladeBrakeToIdle = new ISpriteAnimation();
+    public ISpriteAnimation bladeDashDown = new ISpriteAnimation();
 
-    public Sprite[] bladeDashHorizontalBackwards = new Sprite[5];
-    int bladeDashHorizontalBackwardsFrameRate = 20;
-    bool bladeDashHorizontalBackwardsLoop = false;
-    int bladeDashHorizontalBackwardsLoopFrame = 1;
+    [System.Serializable]
+    public class ISpriteAnimation {     //needs to be class in order to show in inspector but its bascially a struct
+        public Sprite[] sprites;
+        [HideInInspector]
+        public int frameRate;
+        [HideInInspector]
+        public bool loop;
+        [HideInInspector]
+        public int loopFrame = 1;
+        [HideInInspector]
+        public bool playAnimationAfter = false;
+    }
 
-    public Sprite[] bladeDashHorizontalBackwardsGrounded= new Sprite[10];
-    int bladeDashHorizontalBackwardsGroundedFrameRate = 20;
-    bool bladeDashHorizontalBackwardsGroundedLoop = false;
-    int bladeDashHorizontalBackwardsGroundedLoopFrame = 1;
+    private void Start() {
+        InitializeSpriteAnimations();
+    }
 
-    public Sprite[] bladeDashHorizontalForward = new Sprite[5];
-    int bladeDashHorizontalForwardFrameRate = 20;
-    bool bladeDashHorizontalForwardLoop = false;
-    int bladeDashHorizontalForwardLoopFrame = 1;
+    private void InitializeSpriteAnimations() {
+        bladeIdle.frameRate = 10;
+        bladeIdle.loop = true;
+        bladeIdle.loopFrame = 1;
 
-    public Sprite[] bladeDashHorizontalForwardGrounded = new Sprite[3];
-    int bladeDashHorizontalForwardGroundedFrameRate = 20;
-    bool bladeDashHorizontalForwardGroundedLoop = false;
-    int bladeDashHorizontalForwardGroundedLoopFrame = 1;
+        bladeDashBackwards.frameRate = 20;
+        bladeDashBackwards.loop = false;
 
+        bladeDashForwards.frameRate = 20;
+        bladeDashForwards.loop = false;
 
-    public Sprite[] bladeDashUp = new Sprite[5];
-    int bladeDashUpFrameRate = 15;
-    bool bladeDashUpLoop = false;
-    int bladeDashUpLoopFrame = 1;
+        bladeDashBackwardsGrounded.frameRate = 20;
+        bladeDashBackwardsGrounded.loop = false;
+        bladeDashBackwardsGrounded.loopFrame = 1;
+        bladeDashBackwardsGrounded.playAnimationAfter = true;
 
-    public Sprite[] bladeFalling = new Sprite[8];
-    int bladeFallingFrameRate = 15;
-    bool bladeFallingLoop = true;
-    int bladeFallingLoopFrame = 4;
+        bladeDashForwardsGrounded.frameRate = 20;
+        bladeDashForwardsGrounded.loop = false;
 
-    public Sprite[] bladeJumping = new Sprite[2];
-    int bladeJumpingFrameRate = 20;
-    bool bladeJumpingLoop = true;
-    int bladeJumpingLoopFrame = 2;
+        bladeDashUp.frameRate = 15;
+        bladeDashUp.loop = false;
 
-    public Sprite[] bladeLanding = new Sprite[9];
-    int bladeLandingFrameRate = 20;
-    bool bladeLandingLoop = true;
-    int bladeLandingLoopFrame = 1;
+        bladeDashDown.frameRate = 15;
+        bladeDashDown.loop = false;
 
-    public Sprite[] bladeRunning = new Sprite[6];
-    int bladeRunningFrameRate = 14;
-    bool bladeRunningLoop = true;
-    int bladeRunningLoopFrame = 1;
+        bladeFalling.frameRate = 15;
+        bladeFalling.loop = true;
+        bladeFalling.loopFrame = 4;
 
-    public Sprite[] bladeAccel = new Sprite[6];
-    int bladeAccelFrameRate = 10;
-    bool bladeAccelLoop = true;
-    int bladeAccelLoopFrame = 1;
+        bladeJumping.frameRate = 20;
+        bladeJumping.loop = true;
+        bladeJumping.loopFrame = 2;
 
-    public Sprite[] bladeBrake = new Sprite[5];
-    int bladeBrakeFrameRate = 15;
-    bool bladeBrakeLoop = true;
-    int bladeBrakeLoopFrame = 2;
+        bladeLanding.frameRate = 20;
+        bladeLanding.loop = true;
+        bladeLanding.loopFrame = 1;
+        bladeLanding.playAnimationAfter = true;
 
-    public Sprite[] bladeSoftBrake = new Sprite[4];
-    int bladeSoftBrakeFrameRate = 10;
-    bool bladeSoftBrakeLoop = true;
-    int bladeSoftBrakeLoopFrame = 2;
+        bladeRunning.frameRate = 14;
+        bladeRunning.loop = true;
+        bladeRunning.loopFrame = 1;
 
-    public Sprite[] bladeBrakeToIdle = new Sprite[1];
-    int bladeBrakeToIdleFrameRate = 45;
-    bool bladeBrakeToIdleLoop = false;
-    int bladeBrakeToIdleLoopFrame = 1;
+        bladeAccel.frameRate = 10;
+        bladeAccel.loop = true;
+        bladeAccel.loopFrame = 1;
+
+        bladeBrake.frameRate = 15;
+        bladeBrake.loop = true;
+        bladeBrake.loopFrame = 2;
+
+        bladeSoftBrake.frameRate = 10;
+        bladeSoftBrake.loop = true;
+        bladeSoftBrake.loopFrame = 2;
+
+        bladeBrakeToIdle.frameRate = 45;
+        bladeBrakeToIdle.loop = false;
+        bladeBrakeToIdle.loopFrame = 1;
+
+    }
+
 
     //THIS PLAYS AN ANIMATION   (THE ANIMATION NAME, THE GAMEOBJECT THAT THE ANIMATION WILL BE APPLIED TO, WEATHER THE ANIMATION WILL RESET ITSELF IF CALLED AGAIN,THE STARTING FRAME, NAME OF THE ANIMATION A SMOOTH TRANSITION IS DONE WITH)
     public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame, string smoothTransitionWithAnimation = null) {
@@ -102,143 +125,153 @@ public class AnimationController : MonoBehaviour {
         currentAnimation = animation;                                           //saves the animation string locally to compare with new animations that are being called. See above 
         switch (animation) {
             case "BladeIdle":
-                currentFrameLength = 1f / BladeIdleFrameRate;  //f is important for floatpoint division
-                doesLoop = BladeIdleLoop;
-                currentLoopFrame = BladeIdleLoopFrame;
-                playAnimationAfterLastFrame = false;
-                currentAnimationLength = BladeIdle.Length;
-                for (int i = 0; i < BladeIdle.Length; i++) {
-                    currentSprite[i] = BladeIdle[i];
+                currentFrameLength = 1f / bladeIdle.frameRate;  //f is important for floatpoint division
+                doesLoop = bladeIdle.loop;
+                currentLoopFrame = bladeIdle.loopFrame;
+                playAnimationAfterLastFrame = bladeIdle.playAnimationAfter;
+                currentAnimationLength = bladeIdle.sprites.Length;
+                for (int i = 0; i < bladeIdle.sprites.Length; i++) {
+                    currentSprite[i] = bladeIdle.sprites[i];
                 }
                 break;
             case "BladeDashHorizontalBackwards":
-                currentFrameLength = 1f / bladeDashHorizontalBackwardsFrameRate;
-                doesLoop = bladeDashHorizontalBackwardsLoop;
-                playAnimationAfterLastFrame = false;
-                currentLoopFrame = bladeDashHorizontalBackwardsLoopFrame;
-                currentAnimationLength = bladeDashHorizontalBackwards.Length;
-                for (int i = 0; i < bladeDashHorizontalBackwards.Length; i++) {
-                    currentSprite[i] = bladeDashHorizontalBackwards[i];
+                currentFrameLength = 1f / bladeDashBackwards.frameRate;
+                doesLoop = bladeDashBackwards.loop;
+                playAnimationAfterLastFrame = bladeDashBackwards.playAnimationAfter;
+                currentLoopFrame = bladeDashBackwards.loopFrame;
+                currentAnimationLength = bladeDashBackwards.sprites.Length;
+                for (int i = 0; i < bladeDashBackwards.sprites.Length; i++) {
+                    currentSprite[i] = bladeDashBackwards.sprites[i];
                 }
                 break;
             case "BladeDashHorizontalForward":
-                currentFrameLength = 1f / bladeDashHorizontalForwardFrameRate;
-                doesLoop = bladeDashHorizontalForwardLoop;
-                playAnimationAfterLastFrame = false;
-                currentLoopFrame = bladeDashHorizontalForwardLoopFrame;
-                currentAnimationLength = bladeDashHorizontalForward.Length;
-                for (int i = 0; i < bladeDashHorizontalForward.Length; i++) {
-                    currentSprite[i] = bladeDashHorizontalForward[i];
+                currentFrameLength = 1f / bladeDashForwards.frameRate;
+                doesLoop = bladeDashForwards.loop;
+                playAnimationAfterLastFrame = bladeDashForwards.playAnimationAfter;
+                currentLoopFrame = bladeDashForwards.loopFrame;
+                currentAnimationLength = bladeDashForwards.sprites.Length;
+                for (int i = 0; i < bladeDashForwards.sprites.Length; i++) {
+                    currentSprite[i] = bladeDashForwards.sprites[i];
                 }
                 break;
             case "BladeDashHorizontalBackwardsGrounded":
-                currentFrameLength = 1f / bladeDashHorizontalBackwardsGroundedFrameRate;
-                doesLoop = bladeDashHorizontalBackwardsGroundedLoop;
-                playAnimationAfterLastFrame = true;
-                currentLoopFrame = bladeDashHorizontalBackwardsGroundedLoopFrame;
-                currentAnimationLength = bladeDashHorizontalBackwardsGrounded.Length;
-                for (int i = 0; i < bladeDashHorizontalBackwardsGrounded.Length; i++) {
-                    currentSprite[i] = bladeDashHorizontalBackwardsGrounded[i];
+                currentFrameLength = 1f / bladeDashBackwardsGrounded.frameRate;
+                doesLoop = bladeDashBackwardsGrounded.loop;
+                playAnimationAfterLastFrame = bladeDashBackwardsGrounded.playAnimationAfter;
+                currentLoopFrame = bladeDashBackwardsGrounded.frameRate;
+                currentAnimationLength = bladeDashBackwardsGrounded.sprites.Length;
+                for (int i = 0; i < bladeDashBackwardsGrounded.sprites.Length; i++) {
+                    currentSprite[i] = bladeDashBackwardsGrounded.sprites[i];
                 }
                 break;
             case "BladeDashHorizontalForwardGrounded":
-                currentFrameLength = 1f / bladeDashHorizontalForwardGroundedFrameRate;
-                doesLoop = bladeDashHorizontalForwardGroundedLoop;
-                playAnimationAfterLastFrame = false;
-                currentLoopFrame = bladeDashHorizontalForwardGroundedLoopFrame;
-                currentAnimationLength = bladeDashHorizontalForwardGrounded.Length;
-                for (int i = 0; i < bladeDashHorizontalForwardGrounded.Length; i++) {
-                    currentSprite[i] = bladeDashHorizontalForwardGrounded[i];
+                currentFrameLength = 1f / bladeDashForwardsGrounded.frameRate;
+                doesLoop = bladeDashForwardsGrounded.loop;
+                playAnimationAfterLastFrame = bladeDashForwardsGrounded.playAnimationAfter;
+                currentLoopFrame = bladeDashForwardsGrounded.loopFrame;
+                currentAnimationLength = bladeDashForwardsGrounded.sprites.Length;
+                for (int i = 0; i < bladeDashForwardsGrounded.sprites.Length; i++) {
+                    currentSprite[i] = bladeDashForwardsGrounded.sprites[i];
                 }
                 break;
             case "BladeDashUp":
-                currentFrameLength = 1f / bladeDashUpFrameRate;
-                doesLoop = bladeDashUpLoop;
-                currentLoopFrame = bladeDashUpLoopFrame;
-                playAnimationAfterLastFrame = false;
-                currentAnimationLength = bladeDashUp.Length;
-                for (int i = 0; i < bladeDashUp.Length; i++) {
-                    currentSprite[i] = bladeDashUp[i];
+                currentFrameLength = 1f / bladeDashUp.frameRate;
+                doesLoop = bladeDashUp.loop;
+                currentLoopFrame = bladeDashUp.loopFrame;
+                playAnimationAfterLastFrame = bladeDashUp.playAnimationAfter;
+                currentAnimationLength = bladeDashUp.sprites.Length;
+                for (int i = 0; i < bladeDashUp.sprites.Length; i++) {
+                    currentSprite[i] = bladeDashUp.sprites[i];
+                }
+                break;
+            case "BladeDashDown":
+                currentFrameLength = 1f / bladeDashDown.frameRate;
+                doesLoop = bladeDashDown.loop;
+                currentLoopFrame = bladeDashDown.loopFrame;
+                playAnimationAfterLastFrame = bladeDashDown.playAnimationAfter;
+                currentAnimationLength = bladeDashDown.sprites.Length;
+                for (int i = 0; i < bladeDashDown.sprites.Length; i++) {
+                    currentSprite[i] = bladeDashDown.sprites[i];
                 }
                 break;
             case "BladeFalling":
-                currentFrameLength = 1f / bladeFallingFrameRate;
-                doesLoop = bladeFallingLoop;
-                currentLoopFrame = bladeFallingLoopFrame;
-                playAnimationAfterLastFrame = false;
-                currentAnimationLength = bladeFalling.Length;
-                for (int i = 0; i < bladeFalling.Length; i++) {
-                    currentSprite[i] = bladeFalling[i];
+                currentFrameLength = 1f / bladeFalling.frameRate;
+                doesLoop = bladeFalling.loop;
+                currentLoopFrame = bladeFalling.loopFrame;
+                playAnimationAfterLastFrame = bladeFalling.playAnimationAfter;
+                currentAnimationLength = bladeFalling.sprites.Length;
+                for (int i = 0; i < bladeFalling.sprites.Length; i++) {
+                    currentSprite[i] = bladeFalling.sprites[i];
                 }
                 break;
             case "BladeJumping":
-                currentFrameLength = 1f / bladeJumpingFrameRate;
-                doesLoop = bladeJumpingLoop;
-                currentLoopFrame = bladeJumpingLoopFrame;
-                playAnimationAfterLastFrame = false;
-                currentAnimationLength = bladeJumping.Length;
-                for (int i = 0; i < bladeJumping.Length; i++) {
-                    currentSprite[i] = bladeJumping[i];
+                currentFrameLength = 1f / bladeJumping.frameRate;
+                doesLoop = bladeJumping.loop;
+                currentLoopFrame = bladeJumping.loopFrame;
+                playAnimationAfterLastFrame = bladeJumping.playAnimationAfter;
+                currentAnimationLength = bladeJumping.sprites.Length;
+                for (int i = 0; i < bladeJumping.sprites.Length; i++) {
+                    currentSprite[i] = bladeJumping.sprites[i];
                 }
                 break;
             case "BladeLanding":
-                currentFrameLength = 1f / bladeLandingFrameRate;
-                doesLoop = bladeLandingLoop;
-                currentLoopFrame = bladeLandingLoopFrame;
-                playAnimationAfterLastFrame = true;
-                currentAnimationLength = bladeLanding.Length;
-                for (int i = 0; i < bladeLanding.Length; i++) {
-                    currentSprite[i] = bladeLanding[i];
+                currentFrameLength = 1f / bladeLanding.frameRate;
+                doesLoop = bladeLanding.loop;
+                currentLoopFrame = bladeLanding.loopFrame;
+                playAnimationAfterLastFrame = bladeLanding.playAnimationAfter;
+                currentAnimationLength = bladeLanding.sprites.Length;
+                for (int i = 0; i < bladeLanding.sprites.Length; i++) {
+                    currentSprite[i] = bladeLanding.sprites[i];
                 }
                 break;
             case "BladeRunning":
-                currentFrameLength = 1f / bladeRunningFrameRate;
-                doesLoop = bladeRunningLoop;
-                currentLoopFrame = bladeRunningLoopFrame;
+                currentFrameLength = 1f / bladeRunning.frameRate;
+                doesLoop = bladeRunning.loop;
+                currentLoopFrame = bladeRunning.loopFrame;
                 playAnimationAfterLastFrame = false;
-                currentAnimationLength = bladeRunning.Length;
-                for (int i = 0; i < bladeRunning.Length; i++) {
-                    currentSprite[i] = bladeRunning[i];
+                currentAnimationLength = bladeRunning.sprites.Length;
+                for (int i = 0; i < bladeRunning.sprites.Length; i++) {
+                    currentSprite[i] = bladeRunning.sprites[i];
                 }
                 break;
             case "BladeAccel":
-                currentFrameLength = 1f / bladeAccelFrameRate;
-                doesLoop = bladeAccelLoop;
-                currentLoopFrame = bladeAccelLoopFrame;
+                currentFrameLength = 1f / bladeAccel.frameRate;
+                doesLoop = bladeAccel.loop;
+                currentLoopFrame = bladeAccel.loopFrame;
                 playAnimationAfterLastFrame = false;
-                currentAnimationLength = bladeAccel.Length;
-                for (int i = 0; i < bladeAccel.Length; i++) {
-                    currentSprite[i] = bladeAccel[i];
+                currentAnimationLength = bladeAccel.sprites.Length;
+                for (int i = 0; i < bladeAccel.sprites.Length; i++) {
+                    currentSprite[i] = bladeAccel.sprites[i];
                 }
                 break;
             case "BladeBrake":
-                currentFrameLength = 1f / bladeBrakeFrameRate;
-                doesLoop = bladeBrakeLoop;
-                currentLoopFrame = bladeBrakeLoopFrame;
+                currentFrameLength = 1f / bladeBrake.frameRate;
+                doesLoop = bladeBrake.loop;
+                currentLoopFrame = bladeBrake.loopFrame;
                 playAnimationAfterLastFrame = true;
-                currentAnimationLength = bladeBrake.Length;
-                for (int i = 0; i < bladeBrake.Length; i++) {
-                    currentSprite[i] = bladeBrake[i];
+                currentAnimationLength = bladeBrake.sprites.Length;
+                for (int i = 0; i < bladeBrake.sprites.Length; i++) {
+                    currentSprite[i] = bladeBrake.sprites[i];
                 }
                 break;
             case "BladeSoftBrake":
-                currentFrameLength = 1f / bladeSoftBrakeFrameRate;
-                doesLoop = bladeSoftBrakeLoop;
-                currentLoopFrame = bladeSoftBrakeLoopFrame;
+                currentFrameLength = 1f / bladeSoftBrake.frameRate;
+                doesLoop = bladeSoftBrake.loop;
+                currentLoopFrame = bladeSoftBrake.loopFrame;
                 playAnimationAfterLastFrame = false;
-                currentAnimationLength = bladeSoftBrake.Length;
-                for (int i = 0; i < bladeSoftBrake.Length; i++) {
-                    currentSprite[i] = bladeSoftBrake[i];
+                currentAnimationLength = bladeSoftBrake.sprites.Length;
+                for (int i = 0; i < bladeSoftBrake.sprites.Length; i++) {
+                    currentSprite[i] = bladeSoftBrake.sprites[i];
                 }
                 break;
             case "BladeBrakeToIdle":
-                currentFrameLength = 1f / bladeBrakeToIdleFrameRate;
-                doesLoop = bladeBrakeToIdleLoop;
-                currentLoopFrame = bladeBrakeToIdleLoopFrame;
+                currentFrameLength = 1f / bladeBrakeToIdle.frameRate;
+                doesLoop = bladeBrakeToIdle.loop;
+                currentLoopFrame = bladeBrakeToIdle.loopFrame;
                 playAnimationAfterLastFrame = true;
-                currentAnimationLength = bladeBrakeToIdle.Length;
-                for (int i = 0; i < bladeBrakeToIdle.Length; i++) {
-                    currentSprite[i] = bladeBrakeToIdle[i];
+                currentAnimationLength = bladeBrakeToIdle.sprites.Length;
+                for (int i = 0; i < bladeBrakeToIdle.sprites.Length; i++) {
+                    currentSprite[i] = bladeBrakeToIdle.sprites[i];
                 }
                 break;
             default:
