@@ -36,9 +36,9 @@ public class AnimationController : MonoBehaviour {
     public class ISpriteAnimation {     //needs to be class in order to show in inspector but its bascially a struct
         public Sprite[] sprites;
         [HideInInspector]
-        public int frameRate;
+        public int frameRate = 10;
         [HideInInspector]
-        public bool loop;
+        public bool loop = false;
         [HideInInspector]
         public int loopFrame = 1;
         [HideInInspector]

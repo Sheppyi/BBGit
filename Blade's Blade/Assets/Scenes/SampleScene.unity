@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 219468727}
   - component: {fileID: 219468726}
   - component: {fileID: 219468729}
+  - component: {fileID: 219468730}
   - component: {fileID: 219468728}
   m_Layer: 15
   m_Name: BladeDefMode
@@ -533,6 +534,17 @@ MonoBehaviour:
     loop: 0
     loopFrame: 1
     playAnimationAfter: 0
+--- !u!114 &219468730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 219468723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dcefb2d73d31e245b94f9cdd6b74593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &247311280
 GameObject:
   m_ObjectHideFlags: 0

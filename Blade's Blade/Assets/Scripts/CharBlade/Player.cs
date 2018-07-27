@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(AnimationController))]
+[RequireComponent(typeof(FightController))]
 
 public class Player : MonoBehaviour {
     float jumpVelocity;                         //the velocity that the player Jumps with. Gets calculated in CalculatePhysics() !CAN BE OVERWRITTEN. IF YOU WANT TO CHANGE BACK TO DEFAULT CALL CALCULATE PHYSICS AGAIN!
