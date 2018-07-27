@@ -358,6 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSpriteFrame: 0
+  isAttack: 0
   currentAnimation: null
   bladeIdle:
     sprites:
@@ -534,6 +535,18 @@ MonoBehaviour:
     loop: 0
     loopFrame: 1
     playAnimationAfter: 0
+  bladeFastUp:
+    sprites:
+    - {fileID: 21300000, guid: eeb44fc66826da145b3161d3e60ee9e8, type: 3}
+    - {fileID: 21300002, guid: eeb44fc66826da145b3161d3e60ee9e8, type: 3}
+    - {fileID: 21300004, guid: eeb44fc66826da145b3161d3e60ee9e8, type: 3}
+    - {fileID: 21300006, guid: eeb44fc66826da145b3161d3e60ee9e8, type: 3}
+    - {fileID: 21300008, guid: eeb44fc66826da145b3161d3e60ee9e8, type: 3}
+    - {fileID: 21300010, guid: eeb44fc66826da145b3161d3e60ee9e8, type: 3}
+    frameRate: 10
+    loop: 0
+    loopFrame: 1
+    playAnimationAfter: 0
 --- !u!114 &219468730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -545,6 +558,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dcefb2d73d31e245b94f9cdd6b74593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inAttack: 0
+  currentDamageFrame: 
 --- !u!1 &247311280
 GameObject:
   m_ObjectHideFlags: 0

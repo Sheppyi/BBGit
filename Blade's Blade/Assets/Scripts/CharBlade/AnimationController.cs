@@ -5,17 +5,21 @@ using UnityEngine;
 public class AnimationController : MonoBehaviour {
 
     SpriteRenderer currentSpriteRenderer;
+    FightController fightController;
     public int currentSpriteFrame = 0;
     Sprite[] currentSprite = new Sprite[50];    //kann so groß sein wie will nur nicht zu klein
     int currentAnimationLength;
     bool doesLoop;                   
+    public bool isAttack;
     float currentFrameLength;
     float currentFrameLengthT;
     public string currentAnimation = "null";
     int currentLoopFrame = 1;
     bool playAnimationAfterLastFrame;
     GameObject currentObject;
+    int attackFrameCheck = 0;
 
+    //movement
     public ISpriteAnimation bladeIdle = new ISpriteAnimation();
     public ISpriteAnimation bladeDashBackwards = new ISpriteAnimation();
     public ISpriteAnimation bladeDashBackwardsGrounded = new ISpriteAnimation();
@@ -31,6 +35,9 @@ public class AnimationController : MonoBehaviour {
     public ISpriteAnimation bladeSoftBrake = new ISpriteAnimation();
     public ISpriteAnimation bladeBrakeToIdle = new ISpriteAnimation();
     public ISpriteAnimation bladeDashDown = new ISpriteAnimation();
+    //attacks
+    public ISpriteAnimation bladeFastUp = new ISpriteAnimation();
+
 
     [System.Serializable]
     public class ISpriteAnimation {     //needs to be class in order to show in inspector but its bascially a struct
@@ -46,6 +53,7 @@ public class AnimationController : MonoBehaviour {
     }
 
     private void Start() {
+        fightController = this.GetComponent<FightController>();
         InitializeSpriteAnimations();
     }
 
@@ -55,21 +63,16 @@ public class AnimationController : MonoBehaviour {
         bladeIdle.loopFrame = 1;
 
         bladeDashBackwards.frameRate = 20;
-        bladeDashBackwards.loop = false;
 
         bladeDashForwards.frameRate = 20;
-        bladeDashForwards.loop = false;
 
         bladeDashBackwardsGrounded.frameRate = 20;
-        bladeDashBackwardsGrounded.loop = false;
-        bladeDashBackwardsGrounded.loopFrame = 1;
+
         bladeDashBackwardsGrounded.playAnimationAfter = true;
 
         bladeDashForwardsGrounded.frameRate = 20;
-        bladeDashForwardsGrounded.loop = false;
 
         bladeDashUp.frameRate = 15;
-        bladeDashUp.loop = false;
 
         bladeDashDown.frameRate = 15;
         bladeDashDown.loop = false;
@@ -107,19 +110,30 @@ public class AnimationController : MonoBehaviour {
         bladeBrakeToIdle.loop = false;
         bladeBrakeToIdle.loopFrame = 1;
 
+        //attacks
+        bladeFastUp.frameRate = 20;
+        
+
     }
 
 
-    //THIS PLAYS AN ANIMATION   (THE ANIMATION NAME, THE GAMEOBJECT THAT THE ANIMATION WILL BE APPLIED TO, WEATHER THE ANIMATION WILL RESET ITSELF IF CALLED AGAIN,THE STARTING FRAME, NAME OF THE ANIMATION A SMOOTH TRANSITION IS DONE WITH)
-    public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame, string smoothTransitionWithAnimation = null) {
+    // (THE ANIMATION NAME, THE GAMEOBJECT THAT THE ANIMATION WILL BE APPLIED TO, WEATHER THE ANIMATION WILL RESET ITSELF IF CALLED AGAIN,THE STARTING FRAME, NAME OF THE ANIMATION A SMOOTH TRANSITION IS DONE WITH)
+    public void PlayAnimation(string animation, GameObject toChange, bool overrideAnimation, int startAtFrame, string smoothTransitionWithAnimation = null, bool isAttackPassed = false, bool cancelAttackAnimation = false) {
         //exits if an animation that is already running is called again                                 <-----------
-        if ((animation == currentAnimation && !overrideAnimation) || (!overrideAnimation && animation == "BladeIdle" && (currentAnimation == "BladeBrake" || currentAnimation == "BladeBrakeToIdle" || currentAnimation == "BladeDashHorizontalBackwardsGrounded"))) {
+        if ((animation == currentAnimation && !overrideAnimation)
+         || (!overrideAnimation && animation == "BladeIdle" && (currentAnimation == "BladeBrake" || currentAnimation == "BladeBrakeToIdle" || currentAnimation == "BladeDashHorizontalBackwardsGrounded"))
+         || fightController.inAttack && !cancelAttackAnimation) {
             return;
+        }
+        if(cancelAttackAnimation){
+            fightController.cancelAttack();
         }
         if (smoothTransitionWithAnimation != currentAnimation) {        //allows for smooth transition
             currentSpriteFrame = startAtFrame;
             currentFrameLengthT = 0;
         }
+        attackFrameCheck = 0;
+        isAttack = isAttackPassed;
         currentObject = toChange;                                               //the object that called the function
         currentSpriteRenderer = toChange.GetComponent<SpriteRenderer>();        //the SpriteRenderer that called the function
         currentAnimation = animation;                                           //saves the animation string locally to compare with new animations that are being called. See above 
@@ -274,6 +288,17 @@ public class AnimationController : MonoBehaviour {
                     currentSprite[i] = bladeBrakeToIdle.sprites[i];
                 }
                 break;
+            case "BladeFastUp":
+                currentFrameLength = 1f / bladeFastUp.frameRate;
+                doesLoop = bladeFastUp.loop;
+                currentLoopFrame = bladeFastUp.loopFrame;
+                playAnimationAfterLastFrame = false;
+                currentAnimationLength = bladeFastUp.sprites.Length;
+                for (int i = 0; i < bladeFastUp.sprites.Length; i++) {
+                    currentSprite[i] = bladeFastUp.sprites[i];
+                }
+                
+                break;
             default:
                 Debug.LogWarning("non-existent Animation String passed");
                 break;
@@ -315,11 +340,28 @@ public class AnimationController : MonoBehaviour {
                 }
                 if (currentSpriteFrame >= currentAnimationLength && !doesLoop) {
                     currentSpriteFrame = currentAnimationLength - 1;
+                    if(isAttack){
+                        fightController.cancelAttack();     //cancel the attack if it is an attack
+                    }
                 }
+                
+                checkForDamageFrame();
                 ApplySprite(currentSprite[currentSpriteFrame]);
             }
         }
+
+    //debug
     }
+
+    public void checkForDamageFrame(){
+        if(isAttack){
+            if(currentSpriteFrame == fightController.currentDamageFrame[attackFrameCheck]){
+                fightController.applyDamage(attackFrameCheck);
+                attackFrameCheck++;
+            }
+        }
+    }
+
 
     public void ApplySprite(Sprite sprite){
         currentSpriteRenderer.sprite = sprite;

@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
     public Vector3 oldVelocity;                 //the velocity of the previous frame
     MovementController movementController;              //The movementcontroller script component
     AnimationController animationController;    //The animationController script component.
+    FightController fightController;
 
     bool movementEnabled = true;                //Is movement enabled or not?
     bool gravityEnabled = true;                 //Is gravity enabled or not?
@@ -44,7 +45,7 @@ public class Player : MonoBehaviour {
     float airbornRotationDeadZone = 3f;         //how fast you need to move in the air (x) in order to change the direction the player is facing in
     float noInputStopping = 1.8f;                 //this adjusts the time the character needs to stop when the player is not pressing any inputs. 2 means twice as long as when he was pressing to the opposite direction
     //animation
-    float fallingAnimationThreshold = -3;       //speed needed for falling animation to play
+    float fallingAnimationThreshold = -100;       //speed needed for falling animation to play
     public bool inlandingAnimation = false;     //needs to be public for animator
     bool landingEnabled = false;                //is landing animation enabled  (ensures it doesnt play the entire time)
     float velocityNeededForLanding =  -20;      //velocity thats needed for the landing animation to play
@@ -60,9 +61,13 @@ public class Player : MonoBehaviour {
 
 
     private void Start() {
-        movementController = GetComponent<MovementController>();
-        animationController = GetComponent<AnimationController>();
+        movementController = this.GetComponent<MovementController>();
+        animationController = this.GetComponent<AnimationController>();
+        fightController = this.GetComponent<FightController>();
         CalculatePhysics(jumpHeight, timeToJumpApex);
+        if(fallingAnimationThreshold > gravity){
+            Debug.Log("Falling animation threshhold is too small");
+        }
     }
 
     public void CalculatePhysics(float jumpHeight, float timeToJumpApex) {
@@ -72,6 +77,12 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
+
+        //temp
+        if(GetInput.bumper_left && GetInput.button_Y_pressed){
+            fightController.Attack("FastUp");
+        }
+
         //initialization
         oldVelocity = velocity;
         if (oldFacingDirection != facingDirection) {
@@ -171,13 +182,13 @@ public class Player : MonoBehaviour {
             inlandingAnimation = false;
         }
         else if (landingEnabled) {
-            animationController.PlayAnimation("BladeLanding", this.gameObject, false, 0);
+            animationController.PlayAnimation("BladeLanding", this.gameObject, false, 0, null, false, true);
             landingEnabled = false;
             inlandingAnimation = true;
         }
 
         //default animations
-        if (velocity.y <= fallingAnimationThreshold && !inDash) {          //falling
+        if (velocity.y <= fallingAnimationThreshold * Time.deltaTime && !inDash) {          //falling
             animationController.PlayAnimation("BladeFalling", this.gameObject, false, 0);
         }
 
