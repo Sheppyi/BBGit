@@ -16,7 +16,7 @@ public class Player : MonoBehaviour {
     FightController fightController;
 
     bool movementEnabled = true;                //Is movement enabled or not?
-    bool gravityEnabled = true;                 //Is gravity enabled or not?
+    public bool gravityEnabled = true;                 //Is gravity enabled or not?
     bool jumpEnabled = true;                    //is Jumping enabled or not?
     bool dashEnabled = true;                    //is Dash enabled or not?
     bool lockDirection = false;                 //is the horizontal velocity not allowed to change the direction the player is facing?
@@ -34,6 +34,7 @@ public class Player : MonoBehaviour {
     public int facingDirection = 1;         //This is the direction the player is facing in  LEAVE PUBLIC PLS K THX
     int oldFacingDirection;                 //previous direction
     bool airborne = true;                   //Is the player in the Air or not?
+    public float disableGravityT;             //will count down to 0 and then activate gravity
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement props
     float jumpHeight = 4;                       //the Height that the player jumps
@@ -137,6 +138,10 @@ public class Player : MonoBehaviour {
         }else {
             dashEnabled = true;
         }
+
+        //disablegravity
+        
+
         
         //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
         //default movement

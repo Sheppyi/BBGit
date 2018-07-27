@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FightController : MonoBehaviour {
 
-    public bool inAttack = false;
 
     AnimationController animationController;
     Player player;
@@ -19,6 +18,7 @@ public class FightController : MonoBehaviour {
         public int[] damageFrames = new int[3];
         public Vector2[] origin;
         public Vector2[] size;
+        public float disableGravityTime;
         //other variables
     }
 
@@ -34,19 +34,17 @@ public class FightController : MonoBehaviour {
         fastUp.damageFrames = new int[]{0,99,99};
         fastUp.origin[0] = new Vector2(3,0);
         fastUp.size[0] = new Vector2(1,6);
+        fastUp.disableGravityTime = 0f;
     }
 
     public void Attack(string attack) {
         player.inlandingAnimation = false;
         switch (attack){
             case "FastUp":
-                animationController.PlayAnimation("BladeFastUp",this.gameObject,false,0,null,true);
-                inAttack = true;    //THIS NEEDS TO BE HERE BECAUSE IT NEEDS TO BE CHANGED AFTER THE ANIMATION IS CALLED
-                animationController.checkForDamageFrame();
-                for(int i = 0; i < 3; i++){
+                for (int i = 0; i < 3; i++) {
                     currentDamageFrame[i] = fastUp.damageFrames[i];
-                    Debug.Log(currentDamageFrame[i]);
                 }
+                animationController.PlayAnimation("BladeFastUp",this.gameObject,false,0,null,true);
                 break;
             default:
                 Debug.Log("non existent attack string passed");
@@ -55,16 +53,11 @@ public class FightController : MonoBehaviour {
         }
     }
 
-    public void applyDamage(int frame){
-        if(inAttack){
-            Debug.Log("Attack");
-        }else{
-            Debug.Log("Trying to apply damage but no attacka animation is playing");
-        }
+    public void ApplyDamage(int frame){
+        Debug.Log("Attack");
     }
 
     public void cancelAttack(){
-        inAttack = false;
         animationController.isAttack = false;
     }
 }

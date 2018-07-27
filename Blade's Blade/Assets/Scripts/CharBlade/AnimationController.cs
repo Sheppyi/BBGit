@@ -122,7 +122,7 @@ public class AnimationController : MonoBehaviour {
         //exits if an animation that is already running is called again                                 <-----------
         if ((animation == currentAnimation && !overrideAnimation)
          || (!overrideAnimation && animation == "BladeIdle" && (currentAnimation == "BladeBrake" || currentAnimation == "BladeBrakeToIdle" || currentAnimation == "BladeDashHorizontalBackwardsGrounded"))
-         || fightController.inAttack && !cancelAttackAnimation) {
+         || isAttack && !cancelAttackAnimation) {
             return;
         }
         if(cancelAttackAnimation){
@@ -297,13 +297,13 @@ public class AnimationController : MonoBehaviour {
                 for (int i = 0; i < bladeFastUp.sprites.Length; i++) {
                     currentSprite[i] = bladeFastUp.sprites[i];
                 }
-                
                 break;
             default:
                 Debug.LogWarning("non-existent Animation String passed");
                 break;
         }
         ApplySprite(currentSprite[currentSpriteFrame]);
+        checkForDamageFrame();
     }
 
 
@@ -344,9 +344,8 @@ public class AnimationController : MonoBehaviour {
                         fightController.cancelAttack();     //cancel the attack if it is an attack
                     }
                 }
-                
-                checkForDamageFrame();
                 ApplySprite(currentSprite[currentSpriteFrame]);
+                checkForDamageFrame();
             }
         }
 
@@ -356,7 +355,7 @@ public class AnimationController : MonoBehaviour {
     public void checkForDamageFrame(){
         if(isAttack){
             if(currentSpriteFrame == fightController.currentDamageFrame[attackFrameCheck]){
-                fightController.applyDamage(attackFrameCheck);
+                fightController.ApplyDamage(attackFrameCheck);
                 attackFrameCheck++;
             }
         }
