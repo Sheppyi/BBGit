@@ -5,7 +5,7 @@ using UnityEngine;
 public class AnimationController : MonoBehaviour {
 
     SpriteRenderer currentSpriteRenderer;
-    FightController fightController;
+    AttackController attackController;
     public int currentSpriteFrame = 0;
     Sprite[] currentSprite = new Sprite[50];    //kann so groß sein wie will nur nicht zu klein
     int currentAnimationLength;
@@ -35,6 +35,7 @@ public class AnimationController : MonoBehaviour {
     public ISpriteAnimation bladeSoftBrake = new ISpriteAnimation();
     public ISpriteAnimation bladeBrakeToIdle = new ISpriteAnimation();
     public ISpriteAnimation bladeDashDown = new ISpriteAnimation();
+    public ISpriteAnimation bladeFallingUp = new ISpriteAnimation();
     //attacks
     public ISpriteAnimation bladeFastUp = new ISpriteAnimation();
 
@@ -53,7 +54,7 @@ public class AnimationController : MonoBehaviour {
     }
 
     private void Start() {
-        fightController = this.GetComponent<FightController>();
+        attackController = this.GetComponent<AttackController>();
         InitializeSpriteAnimations();
     }
 
@@ -107,8 +108,9 @@ public class AnimationController : MonoBehaviour {
         bladeSoftBrake.loopFrame = 2;
 
         bladeBrakeToIdle.frameRate = 45;
-        bladeBrakeToIdle.loop = false;
-        bladeBrakeToIdle.loopFrame = 1;
+
+        bladeFallingUp.frameRate = 0;
+        
 
         //attacks
         bladeFastUp.frameRate = 20;
@@ -122,11 +124,12 @@ public class AnimationController : MonoBehaviour {
         //exits if an animation that is already running is called again                                 <-----------
         if ((animation == currentAnimation && !overrideAnimation)
          || (!overrideAnimation && animation == "BladeIdle" && (currentAnimation == "BladeBrake" || currentAnimation == "BladeBrakeToIdle" || currentAnimation == "BladeDashHorizontalBackwardsGrounded"))
-         || isAttack && !cancelAttackAnimation) {
+         || isAttack && !cancelAttackAnimation
+         || animation == "BladeFallingUp" && currentAnimation == "BladeJumping") {
             return;
         }
         if(cancelAttackAnimation){
-            fightController.cancelAttack();
+            attackController.cancelAttack();
         }
         if (smoothTransitionWithAnimation != currentAnimation) {        //allows for smooth transition
             currentSpriteFrame = startAtFrame;
@@ -288,6 +291,17 @@ public class AnimationController : MonoBehaviour {
                     currentSprite[i] = bladeBrakeToIdle.sprites[i];
                 }
                 break;
+            case "BladeFallingUp":
+                currentFrameLength = 1f / bladeFallingUp.frameRate;
+                doesLoop = bladeFallingUp.loop;
+                currentLoopFrame = bladeFallingUp.loopFrame;
+                playAnimationAfterLastFrame = false;
+                currentAnimationLength = bladeFallingUp.sprites.Length;
+                for (int i = 0; i < bladeFallingUp.sprites.Length; i++) {
+                    currentSprite[i] = bladeFallingUp.sprites[i];
+                }
+                break;
+            //attacks
             case "BladeFastUp":
                 currentFrameLength = 1f / bladeFastUp.frameRate;
                 doesLoop = bladeFastUp.loop;
@@ -305,7 +319,6 @@ public class AnimationController : MonoBehaviour {
         ApplySprite(currentSprite[currentSpriteFrame]);
         checkForDamageFrame();
     }
-
 
     public void Update() {
         if (currentSpriteRenderer != null) {
@@ -341,7 +354,7 @@ public class AnimationController : MonoBehaviour {
                 if (currentSpriteFrame >= currentAnimationLength && !doesLoop) {
                     currentSpriteFrame = currentAnimationLength - 1;
                     if(isAttack){
-                        fightController.cancelAttack();     //cancel the attack if it is an attack
+                        attackController.cancelAttack();     //cancel the attack if it is an attack
                     }
                 }
                 ApplySprite(currentSprite[currentSpriteFrame]);
@@ -354,14 +367,13 @@ public class AnimationController : MonoBehaviour {
 
     public void checkForDamageFrame(){
         if(isAttack){
-            if(currentSpriteFrame == fightController.currentDamageFrame[attackFrameCheck]){
-                fightController.ApplyDamage(attackFrameCheck);
+            if(currentSpriteFrame == attackController.currentDamageFrame[attackFrameCheck]){
+                attackController.ApplyDamage(attackFrameCheck);
                 attackFrameCheck++;
             }
         }
     }
-
-
+    
     public void ApplySprite(Sprite sprite){
         currentSpriteRenderer.sprite = sprite;
             if(this.GetComponent<Player>().facingDirection == 1){

@@ -4,7 +4,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(AnimationController))]
-[RequireComponent(typeof(FightController))]
 
 public class Player : MonoBehaviour {
     float jumpVelocity;                         //the velocity that the player Jumps with. Gets calculated in CalculatePhysics() !CAN BE OVERWRITTEN. IF YOU WANT TO CHANGE BACK TO DEFAULT CALL CALCULATE PHYSICS AGAIN!
@@ -13,28 +12,37 @@ public class Player : MonoBehaviour {
     public Vector3 oldVelocity;                 //the velocity of the previous frame
     MovementController movementController;              //The movementcontroller script component
     AnimationController animationController;    //The animationController script component.
-    FightController fightController;
+    AttackController attackController;
 
-    bool movementEnabled = true;                //Is movement enabled or not?
-    public bool gravityEnabled = true;                 //Is gravity enabled or not?
-    bool jumpEnabled = true;                    //is Jumping enabled or not?
-    bool dashEnabled = true;                    //is Dash enabled or not?
+    public bool movementEnabled = true;                //Is movement enabled or not?
+    public bool attacksEnabled = true;                 //are attacks enabled?
+    public bool jumpEnabled = true;                    //is Jumping enabled or not?
+    public bool dashEnabled = true;                    //is Dash enabled or not?
+    public bool inAttack = false;
+    public bool gravityEnabled = true;          //Is gravity enabled or not?
     bool lockDirection = false;                 //is the horizontal velocity not allowed to change the direction the player is facing?
 
     float dashDoubleClickSpeedTR = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
     float dashDoubleClickSpeedTL = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
     float dashDoubleClickSpeedTU = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
     float dashDoubleClickSpeedTD = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
-    float dashLengthT = 0;                  //is used internally to measure and time the lenght of the dash
+    public float dashLengthT = 0f;                  //is used internally to measure and time the lenght of the dash
     float dashCooldownT = 0;
     bool wasFullSpeed = false;              //turns true if the player hit full speed before velocity.x == 0. Used for animation
-    bool inDash = false;                    //is the player in Dash or not
+    public bool inDash = false;             //is the player in Dash or not
     int AirDashesT = 0;                     //the number of airdashes that are left 
     float dashActivationDelayT = 0;         //is used internally to measure and time the activation Delay for the dash
     public int facingDirection = 1;         //This is the direction the player is facing in  LEAVE PUBLIC PLS K THX
     int oldFacingDirection;                 //previous direction
     bool airborne = true;                   //Is the player in the Air or not?
+    [HideInInspector]
     public float disableGravityT;             //will count down to 0 and then activate gravity
+    [HideInInspector]
+    public float disableMovementT;
+    [HideInInspector]
+    public float disableJumpT;
+    [HideInInspector]
+    public float disableDashT;
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //movement props
     float jumpHeight = 4;                       //the Height that the player jumps
@@ -51,20 +59,24 @@ public class Player : MonoBehaviour {
     bool landingEnabled = false;                //is landing animation enabled  (ensures it doesnt play the entire time)
     float velocityNeededForLanding =  -20;      //velocity thats needed for the landing animation to play
     //dash
-    Vector2 dashSpeed = new Vector2(25,25); 	//horizontal and vertical speed
+    Vector2 dashSpeed = new Vector2(23,23); 	//horizontal and vertical speed
     float dashDoubleClickSpeed = 0.13f;         //how fast do you have to double click in order to activate the dash
-    float dashLength = 0.1f;                    //the length of the dash in seconds
+    float dashLength = 0.15f;                    //the length of the dash in seconds
     Vector2 dashExitSpeed = new Vector2(0,0);   //the speed the dash exits with
     static int AirDashes = 2;                   //the number of airdashes available to the player (maybe add upgrades in the future)
     float dashActivationDelay = 0.3f;           //the for the gravity to reactivate.  !This is skipped if the player touches the ground OR the ceiling  OR the player moves in the air!
     float dashCooldown = 0.3f;                  //the cooldown of the dash 
+
+    //input queue
+    public bool queueEnabled;
+    public bool queueAttackFastUp;
 
 
 
     private void Start() {
         movementController = this.GetComponent<MovementController>();
         animationController = this.GetComponent<AnimationController>();
-        fightController = this.GetComponent<FightController>();
+        attackController = this.GetComponent<AttackController>();
         CalculatePhysics(jumpHeight, timeToJumpApex);
         if(fallingAnimationThreshold > gravity){
             Debug.Log("Falling animation threshhold is too small");
@@ -78,12 +90,16 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
+        Timings();
+        Attacks();
+        Movement();
+        Finish();   //also includes default animations
+    }
 
-        //temp
-        if(GetInput.bumper_left && GetInput.button_Y_pressed){
-            fightController.Attack("FastUp");
-        }
+    //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    //movement functions
 
+    void Timings() {
         //initialization
         oldVelocity = velocity;
         if (oldFacingDirection != facingDirection) {
@@ -103,7 +119,7 @@ public class Player : MonoBehaviour {
                 if (velocity.x > airbornRotationDeadZone) {
                     facingDirection = 1;
                 }
-                else if (velocity.x < -airbornRotationDeadZone){
+                else if (velocity.x < -airbornRotationDeadZone) {
                     facingDirection = -1;
                 }
             }
@@ -114,10 +130,10 @@ public class Player : MonoBehaviour {
         if (velocity.y != 0) { airborne = true; }                                   //airborn
 
         //timing
-        if (dashLengthT < dashLength + 0.1f) {                          //dash length
+        if (dashLengthT < dashLength) {                          //dash length
             dashLengthT += Time.deltaTime;
-            if(dashLengthT >= dashLength) {
-                MovDash(dashExitSpeed , false);
+            if (dashLengthT >= dashLength) {
+                MovDash(dashExitSpeed, false);
             }
         }
         if (dashActivationDelayT < dashActivationDelay + 0.1f && !gravityEnabled) { //dash activationd elay
@@ -135,15 +151,55 @@ public class Player : MonoBehaviour {
         }
         if (dashCooldownT > 0) {     //dashcooldown
             dashCooldownT -= Time.deltaTime;
-        }else {
+        }
+        else if(disableDashT <= 0){
             dashEnabled = true;
         }
 
-        //disablegravity
-        
+        //disable xxx timer (mostly used while attacking)
+        if (disableGravityT > 0) {
+            disableGravityT -= Time.deltaTime;
+            if (disableGravityT <= 0) {
+                gravityEnabled = true;
+            }
+        }   //same for movement
+        if (disableMovementT > 0) {
+            disableMovementT -= Time.deltaTime;
+            if (disableMovementT <= 0) {
+                movementEnabled = true;
+            }
+        }
+        if (disableJumpT > 0) {
+            disableJumpT -= Time.deltaTime;
+            if (disableJumpT <= 0) {
+                jumpEnabled = true;
+            }
+        }
+        if (disableDashT > 0) {
+            disableDashT -= Time.deltaTime;
+            if (disableDashT <= 0) {
+                dashEnabled = true;
+            }
+        }
 
-        
-        //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    }
+
+    void Attacks() {
+        if (attacksEnabled || queueEnabled) {
+            //fast attacks
+            if (GetInput.bumper_left && GetInput.button_Y_pressed || queueAttackFastUp == true) {
+                if (!queueEnabled) {
+                    inAttack = attackController.Attack("FastUp");
+                }
+                else {
+                    queueAttackFastUp = true;
+                }
+            }
+
+        }
+    }
+
+    void Movement() {
         //default movement
         if (movementEnabled) {
 
@@ -160,17 +216,19 @@ public class Player : MonoBehaviour {
         }
         //jump
         if (jumpEnabled && !airborne && GetInput.button_A_pressed) {
-                MovJump();
+            MovJump();
         }
         //dash
         if (dashEnabled && AirDashesT < AirDashes) {
-        		CheckDash();
+            CheckDash();
         }
-        //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    }
+
+    void Finish() {
 
         //gravity
         if (gravityEnabled) {
-                velocity.y += gravity * Time.deltaTime;
+            velocity.y += gravity * Time.deltaTime;
             if (velocity.y < -maxVerticalMovementSpeed / 2) {
                 velocity.y = -maxVerticalMovementSpeed;
             }
@@ -196,24 +254,28 @@ public class Player : MonoBehaviour {
         if (velocity.y <= fallingAnimationThreshold * Time.deltaTime && !inDash) {          //falling
             animationController.PlayAnimation("BladeFalling", this.gameObject, false, 0);
         }
-
+        if (velocity.y > 0 && !inDash) {
+            animationController.PlayAnimation("BladeFallingUp",this.gameObject,false,0);
+        }
         if (Mathf.Abs(velocity.x) == maxHorizontalMovementSpeed) {
             wasFullSpeed = true;
-        }else if (velocity.x == 0) {
+        }
+        else if (velocity.x == 0) {
             wasFullSpeed = false;
         }
-
         if (airborne) {
             wasFullSpeed = false;
         }
+
+        //late timings
+       
 
         //finish
         movementController.Move(velocity * Time.deltaTime);
         Physics2D.SyncTransforms(); //sync hitbox after transform
     }
 
-    //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-    //movement functions
+
     void MovMoveRight() {
         if (!airborne) {
             if (facingDirection == -1) {
@@ -449,6 +511,8 @@ public class Player : MonoBehaviour {
     void MovDash(Vector2 direction, bool activate) {
         inlandingAnimation = false;
         if (activate) {
+            EnableQueue();
+            attacksEnabled = false;
             gravityEnabled = false;
             dashActivationDelayT = dashActivationDelay + 0.2f;
             movementEnabled = false;
@@ -458,6 +522,7 @@ public class Player : MonoBehaviour {
             lockDirection = true;
             velocity = direction * dashSpeed;
             dashLengthT = 0;
+            Debug.Log(dashLengthT);
             AirDashesT++;
             if (!airborne) {
                 dashCooldownT = dashCooldown;
@@ -467,24 +532,24 @@ public class Player : MonoBehaviour {
             }
             //animation
             if (direction == Vector2.up) {
-                animationController.PlayAnimation("BladeDashUp", this.gameObject, true, 0);
+                animationController.PlayAnimation("BladeDashUp", this.gameObject, true, 0, null, false, true);
             }else if (direction == Vector2.down) {
-                animationController.PlayAnimation("BladeDashDown", this.gameObject, true, 0);
+                animationController.PlayAnimation("BladeDashDown", this.gameObject, true, 0, null, false, true);
             }
             else if (airborne) {
                 if ((direction == Vector2.left && facingDirection == 1) || (direction == Vector2.right && facingDirection == -1)) {
-                    animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true, 0);
+                    animationController.PlayAnimation("BladeDashHorizontalBackwards", this.gameObject, true, 0, null, false, true);
                 }
                 else if (direction == Vector2.left || direction == Vector2.right) {
-                    animationController.PlayAnimation("BladeDashHorizontalForward", this.gameObject, true, 0);
+                    animationController.PlayAnimation("BladeDashHorizontalForward", this.gameObject, true, 0, null, false, true);
                 }
             }
             else {
                 if ((direction == Vector2.left && facingDirection == -1) || (direction == Vector2.right && facingDirection == 1)) {
-                    animationController.PlayAnimation("BladeDashHorizontalForwardGrounded", this.gameObject, true, 0);
+                    animationController.PlayAnimation("BladeDashHorizontalForwardGrounded", this.gameObject, true, 0, null, false, true);
                 }
                 else if(direction == Vector2.left || direction == Vector2.right){
-                    animationController.PlayAnimation("BladeDashHorizontalBackwardsGrounded", this.gameObject, true, 0);
+                    animationController.PlayAnimation("BladeDashHorizontalBackwardsGrounded", this.gameObject, true, 0, null, false, true);
                 }
             }
         }
@@ -500,11 +565,26 @@ public class Player : MonoBehaviour {
             }
             jumpEnabled = true;
             inDash = false;
+            attacksEnabled = true;
             lockDirection = false;
-            dashLengthT = dashLength + 0.1f;
+            dashLengthT = dashLength;
             velocity = dashExitSpeed;
-            
+            EndQueue();
         }
+    }
+
+
+    void EnableQueue() {
+        queueEnabled = true;
+    }
+
+    void EndQueue() {
+        queueEnabled = false;
+        //call that shit
+        Attacks();
+        //reset that shit
+        queueAttackFastUp = false;
+
     }
 }
 

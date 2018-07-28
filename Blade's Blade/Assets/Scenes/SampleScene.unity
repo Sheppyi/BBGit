@@ -222,8 +222,8 @@ GameObject:
   - component: {fileID: 219468725}
   - component: {fileID: 219468727}
   - component: {fileID: 219468726}
-  - component: {fileID: 219468729}
   - component: {fileID: 219468730}
+  - component: {fileID: 219468729}
   - component: {fileID: 219468728}
   m_Layer: 15
   m_Name: BladeDefMode
@@ -319,7 +319,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0, z: 0}
   oldVelocity: {x: 0, y: 0, z: 0}
+  movementEnabled: 1
+  attacksEnabled: 1
+  jumpEnabled: 1
+  dashEnabled: 1
+  inAttack: 0
+  gravityEnabled: 1
   facingDirection: 1
+  disableGravityT: 0
+  disableMovementT: 0
+  disableJumpT: 0
+  disableDashT: 0
   inlandingAnimation: 0
 --- !u!61 &219468728
 BoxCollider2D:
@@ -535,6 +545,13 @@ MonoBehaviour:
     loop: 0
     loopFrame: 1
     playAnimationAfter: 0
+  bladeFallingUp:
+    sprites:
+    - {fileID: 21300002, guid: 42d0dc54c0d664742a3089b56ca6ade5, type: 3}
+    frameRate: 10
+    loop: 0
+    loopFrame: 1
+    playAnimationAfter: 0
   bladeFastUp:
     sprites:
     - {fileID: 21300000, guid: eeb44fc66826da145b3161d3e60ee9e8, type: 3}
@@ -555,10 +572,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 219468723}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dcefb2d73d31e245b94f9cdd6b74593, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b1cb9cf5c8085044b467e93d4ecdc89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inAttack: 0
+  cooldownT: 0
   currentDamageFrame: 
 --- !u!1 &247311280
 GameObject:
