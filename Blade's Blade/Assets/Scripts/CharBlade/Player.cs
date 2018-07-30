@@ -21,6 +21,7 @@ public class Player : MonoBehaviour {
     public bool inAttack = false;
     public bool gravityEnabled = true;          //Is gravity enabled or not?
     bool lockDirection = false;                 //is the horizontal velocity not allowed to change the direction the player is facing?
+    bool wasAirborne;
 
     float dashDoubleClickSpeedTR = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
     float dashDoubleClickSpeedTL = 0;       //is used internally for timing the doubleclick of the dash (R= right, L = left etc)
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour {
 
     //input queue
     public bool queueEnabled;
-    public bool queueAttackFastUp;
+    private bool queueAttackFastUp;
 
 
 
@@ -102,6 +103,7 @@ public class Player : MonoBehaviour {
     void Timings() {
         //initialization
         oldVelocity = velocity;
+        wasAirborne = airborne;
         if (oldFacingDirection != facingDirection) {
             oldFacingDirection = facingDirection;
             wasFullSpeed = false;
@@ -317,6 +319,9 @@ public class Player : MonoBehaviour {
                 }
             }
         }
+        if (wasAirborne == true && airborne == false && Mathf.Abs(velocity.x) < maxHorizontalMovementSpeed) {
+            velocity.x /= 2;
+        }
     }
 
     void MovMoveLeft() {
@@ -360,6 +365,9 @@ public class Player : MonoBehaviour {
                     velocity.x = -maxHorizontalMovementSpeed;
                 }
             }
+        }
+        if (wasAirborne == true && airborne == false && Mathf.Abs(velocity.x) < maxHorizontalMovementSpeed) {
+            velocity.x /= 2;
         }
     }
 
@@ -407,7 +415,7 @@ public class Player : MonoBehaviour {
             }
             //animation
             if (velocity.x == 0 && velocity.y == 0 && !inDash && !inlandingAnimation) {
-                animationController.PlayAnimation("BladeIdle", this.gameObject, false, 0);
+                animationController.PlayAnimation("BladeIdle", this.gameObject, false, 3);
             }
         }
         else {
@@ -522,7 +530,6 @@ public class Player : MonoBehaviour {
             lockDirection = true;
             velocity = direction * dashSpeed;
             dashLengthT = 0;
-            Debug.Log(dashLengthT);
             AirDashesT++;
             if (!airborne) {
                 dashCooldownT = dashCooldown;
@@ -584,7 +591,6 @@ public class Player : MonoBehaviour {
         Attacks();
         //reset that shit
         queueAttackFastUp = false;
-
     }
 }
 
